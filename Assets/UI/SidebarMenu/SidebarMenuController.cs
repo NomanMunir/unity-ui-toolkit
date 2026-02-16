@@ -17,6 +17,8 @@
  *  8. style.display          — Show/hide elements
  *  9. userData               — Attach custom data to elements
  * 10. ScrollView             — Scrollable containers
+ * 11. THEMING                — CSS variable override via class toggle
+ * 12. LOCALIZATION           — Data binding pattern for multi-language
  */
 
 using System;
@@ -32,10 +34,21 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public class SidebarMenuController : MonoBehaviour
 {
+    // ─── Inspector Fields ───
+    // Drag your TSS assets here in the Unity Inspector
+    [Header("Theme Style Sheets (TSS)")]
+    [Tooltip("Assign DarkTheme.tss from Themes/ folder")]
+    [SerializeField] private ThemeStyleSheet _darkThemeTSS;
+
+    [Tooltip("Assign LightTheme.tss from Themes/ folder")]
+    [SerializeField] private ThemeStyleSheet _lightThemeTSS;
     // ─── State ───
     private bool _isOpen = false;
     private string _selectedAssetId = null;
-    private AssetCategory? _activeCategory = null;
+    private bool _isDarkTheme = true;
+
+    // Simplified 3-group filter: null=All, "air", "land", "sea"
+    private string _activeGroup = null;
 
     // ─── UI References ───
     private VisualElement _root;
@@ -46,6 +59,13 @@ public class SidebarMenuController : MonoBehaviour
     private VisualElement _assetList;
     private Label _resultsCount;
     private VisualElement _categoryTabs;
+
+    // Theme & Language
+    private Button _themeBtn;
+    private Button _langBtn;
+    private Label _headerTitle;
+    private Label _headerSubtitle;
+    private Label _footerText;
 
 
     // ─────────────────────────────────────────
@@ -77,6 +97,13 @@ public class SidebarMenuController : MonoBehaviour
         _assetList     = _root.Q<VisualElement>("asset-list");
         _resultsCount  = _root.Q<Label>("results-count");
         _categoryTabs  = _root.Q<VisualElement>("category-tabs");
+
+        // Theme & Language buttons
+        _themeBtn       = _root.Q<Button>("btn-theme");
+        _langBtn        = _root.Q<Button>("btn-lang");
+        _headerTitle    = _root.Q<Label>("lbl-header-title");
+        _headerSubtitle = _root.Q<Label>("lbl-header-subtitle");
+        _footerText     = _root.Q<Label>("lbl-footer");
     }
 
 
@@ -109,17 +136,20 @@ public class SidebarMenuController : MonoBehaviour
         // ── Search field — live filtering ──
         _searchField.RegisterValueChangedCallback(evt =>
         {
-            FilterAssets(evt.newValue, _activeCategory);
+            FilterAssets(evt.newValue, _activeGroup);
         });
 
-        // ── Category tabs ──
-        _root.Q<Button>("stab-all").clicked += () => SetCategory(null);
-        _root.Q<Button>("stab-aircraft").clicked += () => SetCategory(AssetCategory.Aircraft);
-        _root.Q<Button>("stab-ground").clicked += () => SetCategory(AssetCategory.GroundVehicles);
-        _root.Q<Button>("stab-naval").clicked += () => SetCategory(AssetCategory.Naval);
-        _root.Q<Button>("stab-infantry").clicked += () => SetCategory(AssetCategory.Infantry);
-        _root.Q<Button>("stab-structures").clicked += () => SetCategory(AssetCategory.Structures);
-        _root.Q<Button>("stab-sensors").clicked += () => SetCategory(AssetCategory.Sensors);
+        // ── Category tabs (3 groups: Air, Land, Sea) ──
+        _root.Q<Button>("stab-all").clicked += () => SetGroup(null);
+        _root.Q<Button>("stab-air").clicked += () => SetGroup("air");
+        _root.Q<Button>("stab-land").clicked += () => SetGroup("land");
+        _root.Q<Button>("stab-sea").clicked += () => SetGroup("sea");
+
+        // ── Theme toggle ──
+        _themeBtn.clicked += ToggleTheme;
+
+        // ── Language cycle ──
+        _langBtn.clicked += CycleLanguage;
     }
 
 
@@ -170,9 +200,9 @@ public class SidebarMenuController : MonoBehaviour
     //  CATEGORY FILTERING
     // ─────────────────────────────────────────
 
-    private void SetCategory(AssetCategory? category)
+    private void SetGroup(string group)
     {
-        _activeCategory = category;
+        _activeGroup = group;
 
         // Update tab visuals
         var tabs = _categoryTabs.Query<Button>(className: "tab-pill").ToList();
@@ -181,22 +211,155 @@ public class SidebarMenuController : MonoBehaviour
             tab.RemoveFromClassList("tab-pill-active");
         }
 
-        string activeTabName = category switch
+        string activeTabName = group switch
         {
-            null                     => "stab-all",
-            AssetCategory.Aircraft   => "stab-aircraft",
-            AssetCategory.GroundVehicles => "stab-ground",
-            AssetCategory.Naval      => "stab-naval",
-            AssetCategory.Infantry   => "stab-infantry",
-            AssetCategory.Structures => "stab-structures",
-            AssetCategory.Sensors    => "stab-sensors",
-            _ => "stab-all"
+            "air"  => "stab-air",
+            "land" => "stab-land",
+            "sea"  => "stab-sea",
+            _      => "stab-all"
         };
 
         _root.Q<Button>(activeTabName)?.AddToClassList("tab-pill-active");
 
         // Re-filter
-        FilterAssets(_searchField.value, category);
+        FilterAssets(_searchField.value, group);
+    }
+
+    /// <summary>Maps AssetCategory to our 3 groups.</summary>
+    private string CategoryToGroup(AssetCategory cat)
+    {
+        return cat switch
+        {
+            AssetCategory.Aircraft       => "air",
+            AssetCategory.Naval          => "sea",
+            // Everything else = land
+            _ => "land"
+        };
+    }
+
+
+    // ─────────────────────────────────────────
+    //  THEME TOGGLE
+    // ─────────────────────────────────────────
+
+    /// <summary>
+    /// Toggles between dark and light themes.
+    ///
+    /// TWO APPROACHES are demonstrated here:
+    ///
+    /// 1. TSS SWAP (Preferred / Unity-native)
+    ///    panelSettings.themeStyleSheet = lightThemeTSS;
+    ///    - Swaps the entire Theme Style Sheet at the PanelSettings level
+    ///    - Affects ALL UIDocuments using that PanelSettings
+    ///    - Requires .tss assets assigned in Inspector
+    ///    - This is the PROPER Unity way to do theming
+    ///
+    /// 2. CLASS TOGGLE (Fallback / CSS-like)
+    ///    root.ToggleInClassList("theme-light");
+    ///    - Overrides CSS variables via USS class
+    ///    - Only affects this specific UIDocument
+    ///    - Works without any Inspector setup
+    ///
+    /// The code tries TSS first, falls back to class toggle.
+    /// </summary>
+    private void ToggleTheme()
+    {
+        _isDarkTheme = !_isDarkTheme;
+
+        // ── Approach 1: TSS swap via PanelSettings (preferred) ──
+        var uiDoc = GetComponent<UIDocument>();
+        if (uiDoc.panelSettings != null && _darkThemeTSS != null && _lightThemeTSS != null)
+        {
+            uiDoc.panelSettings.themeStyleSheet = _isDarkTheme ? _darkThemeTSS : _lightThemeTSS;
+            Debug.Log($"[SidebarMenu] Theme via TSS: {(_isDarkTheme ? "Dark" : "Light")}");
+        }
+        else
+        {
+            // ── Approach 2: USS class toggle fallback ──
+            _sidebarRoot.ToggleInClassList("theme-light");
+            Debug.Log($"[SidebarMenu] Theme via class toggle: {(_isDarkTheme ? "Dark" : "Light")}");
+        }
+
+        // Update button icon
+        _themeBtn.text = _isDarkTheme ? "🌙" : "☀";
+    }
+
+
+    // ─────────────────────────────────────────
+    //  LANGUAGE / LOCALIZATION
+    // ─────────────────────────────────────────
+
+    /// <summary>
+    /// Cycles through available languages: EN → AR → FR → EN...
+    ///
+    /// DATA BINDING PATTERN:
+    ///   1. Each UI label is associated with a localization KEY
+    ///   2. When language changes, we call LocalizationData.Get(key)
+    ///   3. Each label's .text is updated with the translated string
+    ///   4. This is a "manual binding" approach — simple and explicit
+    ///
+    /// In production Unity, you'd use the Localization package which
+    /// provides automatic binding via LocalizedString + StringTable.
+    /// </summary>
+    private void CycleLanguage()
+    {
+        int idx = LocalizationData.GetCurrentLanguageIndex();
+        int next = (idx + 1) % LocalizationData.SupportedLanguages.Length;
+
+        string newLang = LocalizationData.SupportedLanguages[next];
+        LocalizationData.SetLanguage(newLang);
+
+        // Update the button label to show current language
+        _langBtn.text = newLang.ToUpper();
+
+        // Re-bind all localized labels
+        ApplyLocalization();
+
+        Debug.Log($"[SidebarMenu] Language: {LocalizationData.LanguageNames[next]} ({newLang})");
+    }
+
+    /// <summary>
+    /// Re-applies all localized strings to their labels.
+    ///
+    /// BINDING MAP:
+    ///   Label name         →  Localization key
+    ///   lbl-header-title   →  "header.title"
+    ///   lbl-header-subtitle→  "header.subtitle"
+    ///   lbl-footer         →  "footer.text"
+    ///   stab-all           →  "tab.all"
+    ///   results-count      →  "results.count"
+    /// </summary>
+    private void ApplyLocalization()
+    {
+        // ── Header ──
+        _headerTitle.text    = LocalizationData.Get("header.title");
+        _headerSubtitle.text = LocalizationData.Get("header.subtitle");
+
+        // ── Tabs ──
+        _root.Q<Button>("stab-all").text  = LocalizationData.Get("tab.all");
+        _root.Q<Button>("stab-air").text  = LocalizationData.Get("tab.air");
+        _root.Q<Button>("stab-land").text = LocalizationData.Get("tab.land");
+        _root.Q<Button>("stab-sea").text  = LocalizationData.Get("tab.sea");
+
+        // ── Footer ──
+        _footerText.text = LocalizationData.Get("footer.text");
+
+        // ── Re-count with localized format ──
+        int visibleCount = 0;
+        foreach (var child in _assetList.Children())
+        {
+            if (child.userData is SimulationAsset &&
+                child.style.display != DisplayStyle.None)
+                visibleCount++;
+        }
+        UpdateResultsCount(visibleCount);
+
+        // ── Update empty state if visible ──
+        if (_emptyState != null)
+        {
+            _emptyState.Q<Label>(className: "empty-state-text").text = LocalizationData.Get("empty.title");
+            _emptyState.Q<Label>(className: "empty-state-hint").text = LocalizationData.Get("empty.hint");
+        }
     }
 
 
@@ -317,13 +480,13 @@ public class SidebarMenuController : MonoBehaviour
     // ─────────────────────────────────────────
 
     /// <summary>
-    /// Filters visible cards by search text and category.
+    /// Filters visible cards by search text and group (air/land/sea).
     ///
     /// Uses style.display = DisplayStyle.Flex / None
     /// to show/hide elements. This is the UI Toolkit
     /// equivalent of element.style.display in web CSS.
     /// </summary>
-    private void FilterAssets(string searchQuery, AssetCategory? category)
+    private void FilterAssets(string searchQuery, string group)
     {
         int visibleCount = 0;
         string query = searchQuery?.ToLower() ?? "";
@@ -337,9 +500,9 @@ public class SidebarMenuController : MonoBehaviour
                 || asset.Name.ToLower().Contains(query)
                 || asset.Description.ToLower().Contains(query);
 
-            bool matchesCategory = category == null || asset.Category == category;
+            bool matchesGroup = group == null || CategoryToGroup(asset.Category) == group;
 
-            bool visible = matchesSearch && matchesCategory;
+            bool visible = matchesSearch && matchesGroup;
 
             child.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
 
@@ -374,11 +537,11 @@ public class SidebarMenuController : MonoBehaviour
             icon.AddToClassList("empty-state-icon");
             _emptyState.Add(icon);
 
-            var text = new Label("No assets found");
+            var text = new Label(LocalizationData.Get("empty.title"));
             text.AddToClassList("empty-state-text");
             _emptyState.Add(text);
 
-            var hint = new Label("Try a different search or category");
+            var hint = new Label(LocalizationData.Get("empty.hint"));
             hint.AddToClassList("empty-state-hint");
             _emptyState.Add(hint);
 
@@ -398,35 +561,31 @@ public class SidebarMenuController : MonoBehaviour
 
     private void UpdateResultsCount(int count)
     {
-        _resultsCount.text = $"{count} asset{(count != 1 ? "s" : "")} found";
+        _resultsCount.text = LocalizationData.Get("results.count", count);
     }
 
-    /// <summary>Returns a USS class name for the category badge color.</summary>
+    /// <summary>Returns a USS class name for the group badge color.</summary>
     private string GetBadgeClass(AssetCategory category)
     {
-        return category switch
+        string group = CategoryToGroup(category);
+        return group switch
         {
-            AssetCategory.Aircraft       => "badge-aircraft",
-            AssetCategory.GroundVehicles => "badge-ground",
-            AssetCategory.Naval          => "badge-naval",
-            AssetCategory.Infantry       => "badge-infantry",
-            AssetCategory.Structures     => "badge-structures",
-            AssetCategory.Sensors        => "badge-sensors",
-            _ => "badge-aircraft"
+            "air"  => "badge-air",
+            "land" => "badge-land",
+            "sea"  => "badge-sea",
+            _ => "badge-air"
         };
     }
 
-    /// <summary>Short label for the category badge.</summary>
+    /// <summary>Short label for the group badge.</summary>
     private string GetCategoryShortName(AssetCategory category)
     {
-        return category switch
+        string group = CategoryToGroup(category);
+        return group switch
         {
-            AssetCategory.Aircraft       => "AIR",
-            AssetCategory.GroundVehicles => "GND",
-            AssetCategory.Naval          => "SEA",
-            AssetCategory.Infantry       => "INF",
-            AssetCategory.Structures     => "BLD",
-            AssetCategory.Sensors        => "SNS",
+            "air"  => "AIR",
+            "land" => "LAND",
+            "sea"  => "SEA",
             _ => "???"
         };
     }

@@ -17,6 +17,9 @@
          5. ScrollView for long lists
          6. TextField for live search
          7. Foldout for collapsible sections
+         8. THEMING — Swapping CSS variables via class toggle
+         9. LOCALIZATION — Data binding pattern for multi-language
+        10. DATA BINDING — Labels bound to localization keys
     -->
 
     <Style src="SidebarMenu.uss" />
@@ -40,10 +43,16 @@
             <!-- ── Header ── -->
             <ui:VisualElement class="sidebar-header">
                 <ui:VisualElement class="header-row">
-                    <ui:Label text="🎮" class="header-logo" />
-                    <ui:Label text="Asset Library" class="header-title" />
+                    <ui:Label text="🛰" class="header-logo" />
+                    <ui:Label text="Sim Assets" name="lbl-header-title" class="header-title" />
+                    <!-- Spacer pushes buttons to the right -->
+                    <ui:VisualElement class="header-spacer" />
+                    <!-- THEME TOGGLE — swaps dark/light USS variables -->
+                    <ui:Button text="🌙" name="btn-theme" class="icon-btn" />
+                    <!-- LANGUAGE DROPDOWN — cycles through languages -->
+                    <ui:Button text="EN" name="btn-lang" class="icon-btn lang-btn" />
                 </ui:VisualElement>
-                <ui:Label text="Browse simulation assets" class="header-subtitle" />
+                <ui:Label text="Browse and configure simulation entities" name="lbl-header-subtitle" class="header-subtitle" />
             </ui:VisualElement>
 
             <!-- ── Search Bar ── -->
@@ -59,12 +68,9 @@
                            class="tabs-scroll">
                 <ui:VisualElement name="category-tabs" class="sidebar-tabs">
                     <ui:Button text="All" name="stab-all" class="tab-pill tab-pill-active" />
-                    <ui:Button text="✈ Air" name="stab-aircraft" class="tab-pill" />
-                    <ui:Button text="🛡 Ground" name="stab-ground" class="tab-pill" />
-                    <ui:Button text="🚢 Sea" name="stab-naval" class="tab-pill" />
-                    <ui:Button text="🎖 Inf" name="stab-infantry" class="tab-pill" />
-                    <ui:Button text="🏗 Struct" name="stab-structures" class="tab-pill" />
-                    <ui:Button text="📡 Sensor" name="stab-sensors" class="tab-pill" />
+                    <ui:Button text="✈ Air" name="stab-air" class="tab-pill" />
+                    <ui:Button text="🛡 Land" name="stab-land" class="tab-pill" />
+                    <ui:Button text="🚢 Sea" name="stab-sea" class="tab-pill" />
                 </ui:VisualElement>
             </ui:ScrollView>
 
@@ -82,7 +88,7 @@
 
             <!-- ── Footer ── -->
             <ui:VisualElement class="sidebar-footer">
-                <ui:Label text="UI Toolkit • Sidebar Demo" class="footer-text" />
+                <ui:Label text="UI Toolkit • Sidebar Demo" name="lbl-footer" class="footer-text" />
             </ui:VisualElement>
 
         </ui:VisualElement>

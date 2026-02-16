@@ -1,0 +1,69 @@
+/*
+ * ============================================
+ *  DarkTheme.tss — Dark Theme Style Sheet
+ * ============================================
+ *
+ *  WHAT IS A TSS FILE?
+ *  TSS (Theme Style Sheet) is Unity UI Toolkit's
+ *  theme system. It works DIFFERENTLY from USS:
+ *
+ *  ┌──────────────────────────────────────────────┐
+ *  │  USS (.uss)                                  │
+ *  │  - Applied per-UXML document via <Style>     │
+ *  │  - Component-level styling                   │
+ *  │                                              │
+ *  │  TSS (.tss)                                  │
+ *  │  - Applied at the PanelSettings level        │
+ *  │  - Acts as the GLOBAL theme for all UI       │
+ *  │  - Can @import multiple USS files            │
+ *  │  - Swappable at runtime for theme switching  │
+ *  └──────────────────────────────────────────────┘
+ *
+ *  HOW TO USE:
+ *  1. Create a PanelSettings asset in Unity
+ *  2. Assign this TSS to the "Theme Style Sheet" field
+ *  3. ALL UIDocuments using that PanelSettings
+ *     will inherit these styles automatically
+ *
+ *  TSS files use @import to compose multiple USS files:
+ *     @import url("path/to/styles.uss");
+ *
+ *  RUNTIME THEME SWITCHING:
+ *     panelSettings.themeStyleSheet = darkThemeTSS;
+ *     // or
+ *     panelSettings.themeStyleSheet = lightThemeTSS;
+ */
+
+
+/* ============================================
+ *  DARK THEME VARIABLES
+ * ============================================
+ *  These :root variables define the dark color palette.
+ *  When this TSS is active, all UI elements using
+ *  var(--sb-*) will use these dark values.
+ */
+:root {
+    /* ── Core Colors ── */
+    --sb-bg:            #0f1923;
+    --sb-bg-light:      #162232;
+    --sb-bg-card:       #1a2d42;
+    --sb-bg-card-hover: #243b54;
+
+    /* ── Accent ── */
+    --sb-accent:        #00e5ff;
+    --sb-accent-dim:    rgba(0, 229, 255, 0.15);
+    --sb-accent-glow:   rgba(0, 229, 255, 0.4);
+
+    /* ── Typography ── */
+    --sb-text:          #c8d6e5;
+    --sb-text-bright:   #ffffff;
+    --sb-text-muted:    #6b7c93;
+
+    /* ── Borders ── */
+    --sb-border:        rgba(0, 229, 255, 0.12);
+
+    /* ── Status Colors ── */
+    --sb-danger:        #ff6b6b;
+    --sb-success:       #51cf66;
+    --sb-warning:       #fcc419;
+}

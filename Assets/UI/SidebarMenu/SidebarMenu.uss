@@ -80,6 +80,38 @@
 
 
 /* ============================================
+ *  LIGHT THEME — Variable Overrides
+ * ============================================
+ *  CONCEPT: Theme switching works by overriding
+ *  CSS variables on a parent element. When
+ *  .theme-light is added to the root, ALL child
+ *  elements that use var(--sb-*) automatically
+ *  pick up the new values. No per-element changes!
+ *
+ *  PATTERN:
+ *    C#: root.ToggleInClassList("theme-light");
+ *    USS: .theme-light { --sb-bg: #newColor; }
+ *    Result: Everything updates instantly.
+ */
+.theme-light {
+    --sb-bg:            #f0f4f8;
+    --sb-bg-light:      #e2e8f0;
+    --sb-bg-card:       #ffffff;
+    --sb-bg-card-hover: #edf2f7;
+    --sb-accent:        #0077cc;
+    --sb-accent-dim:    rgba(0, 119, 204, 0.1);
+    --sb-accent-glow:   rgba(0, 119, 204, 0.3);
+    --sb-text:          #2d3748;
+    --sb-text-bright:   #1a202c;
+    --sb-text-muted:    #718096;
+    --sb-border:        rgba(0, 119, 204, 0.15);
+    --sb-danger:        #e53e3e;
+    --sb-success:       #38a169;
+    --sb-warning:       #d69e2e;
+}
+
+
+/* ============================================
  *  ROOT CONTAINER
  * ============================================ */
 .sidebar-root {
@@ -258,6 +290,56 @@
     color: var(--sb-text-bright);
     -unity-font-style: bold;
     letter-spacing: 1px;
+}
+
+/* Pushes icon buttons to the right */
+.header-spacer {
+    flex-grow: 1;
+}
+
+/* ── Icon Buttons (Theme + Language) ──
+ *  Small square buttons in the header.
+ *  Demonstrates: border-radius: 50% for circle,
+ *  transition on background and scale.
+ */
+.icon-btn {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    margin-left: 4px;
+    padding: 0;
+    font-size: 14px;
+    color: var(--sb-text-muted);
+    background-color: var(--sb-bg);
+    border-width: 1px;
+    border-color: var(--sb-border);
+    border-radius: 50%;
+    -unity-text-align: middle-center;
+    cursor: link;
+
+    /* ⚡ TRANSITION — smooth hover effects */
+    transition-property: background-color, border-color, color, scale;
+    transition-duration: var(--sb-fast);
+}
+
+.icon-btn:hover {
+    background-color: var(--sb-accent-dim);
+    border-color: var(--sb-accent);
+    color: var(--sb-accent);
+    scale: 1.1;
+}
+
+.icon-btn:active {
+    scale: 0.92;
+}
+
+/* Language button — slightly wider to fit text */
+.lang-btn {
+    width: 36px;
+    min-width: 36px;
+    font-size: 11px;
+    -unity-font-style: bold;
+    letter-spacing: 0.5px;
 }
 
 .header-subtitle {
@@ -534,47 +616,26 @@
     -unity-font-style: bold;
 }
 
-/* Badge colors per category */
-.badge-aircraft {
+/* Badge colors per group */
+.badge-air {
     background-color: rgba(0, 229, 255, 0.15);
 }
-.badge-aircraft .card-badge-text {
+.badge-air .card-badge-text {
     color: #00e5ff;
 }
 
-.badge-ground {
+.badge-land {
     background-color: rgba(255, 171, 0, 0.15);
 }
-.badge-ground .card-badge-text {
+.badge-land .card-badge-text {
     color: #ffab00;
 }
 
-.badge-naval {
+.badge-sea {
     background-color: rgba(41, 121, 255, 0.15);
 }
-.badge-naval .card-badge-text {
+.badge-sea .card-badge-text {
     color: #2979ff;
-}
-
-.badge-infantry {
-    background-color: rgba(81, 207, 102, 0.15);
-}
-.badge-infantry .card-badge-text {
-    color: #51cf66;
-}
-
-.badge-structures {
-    background-color: rgba(206, 147, 216, 0.15);
-}
-.badge-structures .card-badge-text {
-    color: #ce93d8;
-}
-
-.badge-sensors {
-    background-color: rgba(255, 213, 79, 0.15);
-}
-.badge-sensors .card-badge-text {
-    color: #ffd54f;
 }
 
 

@@ -1,0 +1,54 @@
+/*
+ * ============================================
+ *  LightTheme.tss — Light Theme Style Sheet
+ * ============================================
+ *
+ *  This TSS defines the LIGHT color palette.
+ *  Swap to this theme at runtime with:
+ *
+ *     panelSettings.themeStyleSheet = lightThemeTSS;
+ *
+ *  The same :root variables are redefined with
+ *  light-mode colors. Since all UI elements use
+ *  var(--sb-*), the entire UI updates instantly
+ *  when the TSS is swapped.
+ *
+ *  COMPARISON:
+ *  ┌───────────────┬────────────────┬────────────────┐
+ *  │  Property     │  Dark Theme    │  Light Theme   │
+ *  ├───────────────┼────────────────┼────────────────┤
+ *  │  --sb-bg      │  #0f1923       │  #f0f4f8       │
+ *  │  --sb-accent  │  #00e5ff       │  #0077cc       │
+ *  │  --sb-text    │  #c8d6e5       │  #2d3748       │
+ *  └───────────────┴────────────────┴────────────────┘
+ */
+
+
+/* ============================================
+ *  LIGHT THEME VARIABLES
+ * ============================================ */
+:root {
+    /* ── Core Colors ── */
+    --sb-bg:            #f0f4f8;
+    --sb-bg-light:      #e2e8f0;
+    --sb-bg-card:       #ffffff;
+    --sb-bg-card-hover: #edf2f7;
+
+    /* ── Accent ── */
+    --sb-accent:        #0077cc;
+    --sb-accent-dim:    rgba(0, 119, 204, 0.1);
+    --sb-accent-glow:   rgba(0, 119, 204, 0.3);
+
+    /* ── Typography ── */
+    --sb-text:          #2d3748;
+    --sb-text-bright:   #1a202c;
+    --sb-text-muted:    #718096;
+
+    /* ── Borders ── */
+    --sb-border:        rgba(0, 119, 204, 0.15);
+
+    /* ── Status Colors ── */
+    --sb-danger:        #e53e3e;
+    --sb-success:       #38a169;
+    --sb-warning:       #d69e2e;
+}
