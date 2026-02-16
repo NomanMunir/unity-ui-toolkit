@@ -1,0 +1,174 @@
+/* AssetBrowser.uss — Left sidebar asset browser styles */
+
+.asset-browser {
+    width: 260px;
+    min-width: 260px;
+    max-width: 260px;
+    background-color: #0d1220;
+    border-right-width: 1px;
+    border-color: var(--color-border);
+}
+
+.browser-header {
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm);
+}
+
+.browser-title {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    letter-spacing: 3px;
+    -unity-font-style: bold;
+}
+
+/* ── Search Bar ── */
+.search-container {
+    padding: 0 var(--spacing-sm) var(--spacing-sm);
+}
+
+.search-field {
+    height: 30px;
+    font-size: var(--font-sm);
+    background-color: var(--color-bg-card);
+    border-color: var(--color-border);
+    border-width: 1px;
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+}
+
+.search-field:focus {
+    border-color: var(--color-primary);
+}
+
+.search-placeholder {
+    color: var(--color-text-muted);
+    font-size: var(--font-sm);
+    position: absolute;
+    left: var(--spacing-sm);
+    top: 6px;
+    opacity: 0.6;
+}
+
+/* ── Category Filter Tabs ── */
+.category-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0 var(--spacing-sm) var(--spacing-sm);
+}
+
+.category-tab {
+    height: 28px;
+    min-width: 30px;
+    padding-left: var(--spacing-xs);
+    padding-right: var(--spacing-xs);
+    margin: 1px;
+    font-size: 12px;
+    color: var(--color-text-muted);
+    background-color: transparent;
+    border-width: 1px;
+    border-color: var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: link;
+
+    transition-property: background-color, border-color, color;
+    transition-duration: var(--transition-fast);
+}
+
+.category-tab:hover {
+    background-color: var(--color-bg-hover);
+    color: var(--color-text);
+}
+
+.category-tab-active {
+    background-color: rgba(79, 195, 247, 0.15);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* ── Scrollable Area ── */
+.asset-scroll {
+    flex-grow: 1;
+}
+
+/* ── Category Foldouts ── */
+.category-foldout {
+    margin-bottom: var(--spacing-xs);
+}
+
+.category-foldout > .unity-foldout__toggle {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.category-foldout > .unity-foldout__toggle > .unity-foldout__text {
+    font-size: 12px;
+    color: var(--color-text);
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+.category-foldout > .unity-foldout__content {
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+/* ── Asset Tile Grid ── */
+.asset-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+/* ── Individual Asset Tile ── */
+.asset-tile {
+    width: 72px;
+    height: 78px;
+    margin: 3px;
+    padding: var(--spacing-xs);
+    background-color: var(--color-bg-card);
+    border-width: 1px;
+    border-color: var(--color-border);
+    border-radius: var(--radius-md);
+    align-items: center;
+    justify-content: center;
+    cursor: link;
+
+    transition-property: background-color, border-color, scale;
+    transition-duration: var(--transition-fast);
+}
+
+.asset-tile:hover {
+    background-color: var(--color-bg-hover);
+    border-color: var(--color-primary);
+    scale: 1.05;
+}
+
+.asset-tile-selected {
+    background-color: rgba(79, 195, 247, 0.15);
+    border-color: var(--color-primary);
+    border-width: 2px;
+}
+
+.asset-tile-icon {
+    font-size: 24px;
+    -unity-text-align: middle-center;
+    margin-bottom: 2px;
+}
+
+.asset-tile-name {
+    font-size: 9px;
+    color: var(--color-text);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    overflow: hidden;
+    max-height: 22px;
+}
+
+/* ── Footer ── */
+.browser-footer {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-top-width: 1px;
+    border-color: var(--color-border);
+}
+
+.asset-count-label {
+    font-size: 10px;
+    color: var(--color-text-muted);
+}

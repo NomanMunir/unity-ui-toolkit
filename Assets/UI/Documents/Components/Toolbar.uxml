@@ -1,0 +1,37 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <Style src="../Styles/Common.uss" />
+    <Style src="../Styles/Toolbar.uss" />
+
+    <!-- TOP TOOLBAR -->
+    <ui:VisualElement name="toolbar" class="toolbar">
+
+        <!-- Left — File Actions -->
+        <ui:VisualElement class="toolbar-section toolbar-left">
+            <ui:Button text="📁 New" name="btn-new" class="toolbar-btn" />
+            <ui:Button text="💾 Save" name="btn-save" class="toolbar-btn" />
+            <ui:Button text="📂 Load" name="btn-load" class="toolbar-btn" />
+            <ui:VisualElement class="toolbar-separator" />
+            <ui:Button text="↩ Undo" name="btn-undo" class="toolbar-btn" />
+            <ui:Button text="↪ Redo" name="btn-redo" class="toolbar-btn" />
+        </ui:VisualElement>
+
+        <!-- Center — Scenario Title -->
+        <ui:VisualElement class="toolbar-section toolbar-center">
+            <ui:Label text="SCENARIO BUILDER" class="toolbar-title" />
+            <ui:TextField name="scenario-name" value="Untitled Scenario" class="scenario-name-field" />
+        </ui:VisualElement>
+
+        <!-- Right — Simulation Controls -->
+        <ui:VisualElement class="toolbar-section toolbar-right">
+            <ui:Button text="▶ Play" name="btn-play-sim" class="toolbar-btn toolbar-btn-play" />
+            <ui:Button text="⏸ Pause" name="btn-pause-sim" class="toolbar-btn" />
+            <ui:Button text="⏹ Stop" name="btn-stop-sim" class="toolbar-btn" />
+            <ui:VisualElement class="toolbar-separator" />
+            <ui:Button text="⚙" name="btn-settings" class="toolbar-btn toolbar-btn-icon" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

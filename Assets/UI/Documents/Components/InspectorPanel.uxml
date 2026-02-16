@@ -1,0 +1,86 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <Style src="../Styles/Common.uss" />
+    <Style src="../Styles/InspectorPanel.uss" />
+
+    <!-- INSPECTOR PANEL — Right Sidebar -->
+    <ui:VisualElement name="inspector-panel" class="inspector-panel">
+
+        <!-- Header -->
+        <ui:VisualElement class="inspector-header">
+            <ui:Label text="INSPECTOR" class="inspector-title" />
+            <ui:Button text="✕" name="btn-close-inspector" class="inspector-close-btn" />
+        </ui:VisualElement>
+
+        <!-- Empty State (shown when nothing is selected) -->
+        <ui:VisualElement name="inspector-empty" class="inspector-empty">
+            <ui:Label text="🎯" class="empty-icon" />
+            <ui:Label text="Select an asset" class="empty-text" />
+            <ui:Label text="Click an asset tile from the browser to view its properties" class="empty-hint" />
+        </ui:VisualElement>
+
+        <!-- Asset Details (shown when an asset is selected) -->
+        <ui:ScrollView name="inspector-content" class="inspector-content hidden">
+
+            <!-- Asset Preview / Icon -->
+            <ui:VisualElement class="asset-preview">
+                <ui:Label text="✈" name="preview-icon" class="preview-icon" />
+            </ui:VisualElement>
+
+            <!-- Asset Info -->
+            <ui:VisualElement class="asset-info">
+                <ui:Label text="F-16 Falcon" name="asset-name" class="asset-name" />
+                <ui:Label text="Multirole fighter aircraft" name="asset-description" class="asset-description" />
+                <ui:VisualElement class="asset-category-badge">
+                    <ui:Label text="Aircraft" name="asset-category-label" class="category-badge-text" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement class="divider" />
+
+            <!-- Faction Selection -->
+            <ui:VisualElement class="inspector-section">
+                <ui:Label text="FACTION" class="section-title" />
+                <ui:VisualElement class="faction-buttons">
+                    <ui:Button text="🔵 BLUE" name="btn-faction-blue" class="faction-btn faction-btn-blue faction-btn-active" />
+                    <ui:Button text="🔴 RED" name="btn-faction-red" class="faction-btn faction-btn-red" />
+                    <ui:Button text="🟢 NEUTRAL" name="btn-faction-neutral" class="faction-btn faction-btn-neutral" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement class="divider" />
+
+            <!-- Dynamic Properties (populated by C#) -->
+            <ui:VisualElement class="inspector-section">
+                <ui:Label text="PROPERTIES" class="section-title" />
+                <ui:VisualElement name="properties-container" class="properties-container">
+                    <!-- Property rows will be created dynamically -->
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement class="divider" />
+
+            <!-- Instance Count -->
+            <ui:VisualElement class="inspector-section">
+                <ui:Label text="QUANTITY" class="section-title" />
+                <ui:VisualElement class="quantity-row">
+                    <ui:Button text="−" name="btn-qty-minus" class="qty-btn" />
+                    <ui:Label text="1" name="quantity-label" class="quantity-value" />
+                    <ui:Button text="+" name="btn-qty-plus" class="qty-btn" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement class="divider" />
+
+            <!-- Action Buttons -->
+            <ui:VisualElement class="inspector-actions">
+                <ui:Button text="📌 Add to Scene" name="btn-add-scene" class="btn-primary action-btn" />
+                <ui:Button text="👥 Add to Formation" name="btn-add-formation" class="btn-secondary action-btn" />
+            </ui:VisualElement>
+
+        </ui:ScrollView>
+
+    </ui:VisualElement>
+
+</ui:UXML>

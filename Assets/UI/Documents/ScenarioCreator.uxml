@@ -1,0 +1,242 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <!-- Master Styles -->
+    <Style src="../Styles/Common.uss" />
+    <Style src="../Styles/ScenarioCreator.uss" />
+
+    <!-- All component styles (needed since we embed component structure inline) -->
+    <Style src="../Styles/Toolbar.uss" />
+    <Style src="../Styles/AssetBrowser.uss" />
+    <Style src="../Styles/InspectorPanel.uss" />
+    <Style src="../Styles/FormationBuilder.uss" />
+    <Style src="../Styles/SceneHierarchy.uss" />
+
+    <!-- ============================================
+         MASTER LAYOUT — 4-Panel Workspace
+         ============================================
+         Layout structure:
+         ┌─────────── TOOLBAR ──────────────────────┐
+         ├────────┬─────────────────┬────────────────┤
+         │ ASSET  │    VIEWPORT     │   INSPECTOR    │
+         │ BROWSER│   (3D Scene)    │   (Loadout)    │
+         ├────────┴────────┬────────┴────────────────┤
+         │  FORMATION      │   SCENE HIERARCHY       │
+         │  BUILDER        │                          │
+         └─────────────────┴──────────────────────────┘
+    -->
+    <ui:VisualElement name="app-root" class="app-root">
+
+        <!-- ========== TOP TOOLBAR ========== -->
+        <ui:VisualElement name="toolbar" class="toolbar">
+            <ui:VisualElement class="toolbar-section toolbar-left">
+                <ui:Button text="📁 New" name="btn-new" class="toolbar-btn" />
+                <ui:Button text="💾 Save" name="btn-save" class="toolbar-btn" />
+                <ui:Button text="📂 Load" name="btn-load" class="toolbar-btn" />
+                <ui:VisualElement class="toolbar-separator" />
+                <ui:Button text="↩ Undo" name="btn-undo" class="toolbar-btn" />
+                <ui:Button text="↪ Redo" name="btn-redo" class="toolbar-btn" />
+            </ui:VisualElement>
+            <ui:VisualElement class="toolbar-section toolbar-center">
+                <ui:Label text="SCENARIO BUILDER" class="toolbar-title" />
+                <ui:TextField name="scenario-name" value="Untitled Scenario" class="scenario-name-field" />
+            </ui:VisualElement>
+            <ui:VisualElement class="toolbar-section toolbar-right">
+                <ui:Button text="▶ Play" name="btn-play-sim" class="toolbar-btn toolbar-btn-play" />
+                <ui:Button text="⏸ Pause" name="btn-pause-sim" class="toolbar-btn" />
+                <ui:Button text="⏹ Stop" name="btn-stop-sim" class="toolbar-btn" />
+                <ui:VisualElement class="toolbar-separator" />
+                <ui:Button text="⚙" name="btn-settings" class="toolbar-btn toolbar-btn-icon" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- ========== MAIN CONTENT AREA ========== -->
+        <ui:VisualElement name="main-content" class="main-content">
+
+            <!-- LEFT — Asset Browser -->
+            <ui:VisualElement name="asset-browser" class="asset-browser">
+                <ui:VisualElement class="browser-header">
+                    <ui:Label text="ASSETS" class="browser-title" />
+                </ui:VisualElement>
+                <ui:VisualElement class="search-container">
+                    <ui:TextField name="search-field" class="search-field" />
+                </ui:VisualElement>
+                <ui:VisualElement name="category-tabs" class="category-tabs">
+                    <ui:Button text="All" name="tab-all" class="category-tab category-tab-active" />
+                    <ui:Button text="✈" name="tab-aircraft" class="category-tab" />
+                    <ui:Button text="🛡" name="tab-ground" class="category-tab" />
+                    <ui:Button text="🚢" name="tab-naval" class="category-tab" />
+                    <ui:Button text="🎖" name="tab-infantry" class="category-tab" />
+                    <ui:Button text="🏗" name="tab-structures" class="category-tab" />
+                    <ui:Button text="📡" name="tab-sensors" class="category-tab" />
+                </ui:VisualElement>
+                <ui:ScrollView name="asset-scroll" class="asset-scroll">
+                    <ui:Foldout text="✈ Aircraft" name="foldout-aircraft" value="true" class="category-foldout">
+                        <ui:VisualElement name="grid-aircraft" class="asset-grid" />
+                    </ui:Foldout>
+                    <ui:Foldout text="🛡 Ground Vehicles" name="foldout-ground" value="true" class="category-foldout">
+                        <ui:VisualElement name="grid-ground" class="asset-grid" />
+                    </ui:Foldout>
+                    <ui:Foldout text="🚢 Naval" name="foldout-naval" value="true" class="category-foldout">
+                        <ui:VisualElement name="grid-naval" class="asset-grid" />
+                    </ui:Foldout>
+                    <ui:Foldout text="🎖 Infantry" name="foldout-infantry" value="true" class="category-foldout">
+                        <ui:VisualElement name="grid-infantry" class="asset-grid" />
+                    </ui:Foldout>
+                    <ui:Foldout text="🏗 Structures" name="foldout-structures" value="true" class="category-foldout">
+                        <ui:VisualElement name="grid-structures" class="asset-grid" />
+                    </ui:Foldout>
+                    <ui:Foldout text="📡 Sensors" name="foldout-sensors" value="true" class="category-foldout">
+                        <ui:VisualElement name="grid-sensors" class="asset-grid" />
+                    </ui:Foldout>
+                </ui:ScrollView>
+                <ui:VisualElement class="browser-footer">
+                    <ui:Label text="16 assets" name="asset-count" class="asset-count-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- CENTER — Viewport Placeholder -->
+            <ui:VisualElement name="viewport" class="viewport">
+                <ui:VisualElement class="viewport-content">
+                    <ui:Label text="🗺" class="viewport-icon" />
+                    <ui:Label text="3D SCENE VIEWPORT" class="viewport-text" />
+                    <ui:Label text="Your simulation scene renders here" class="viewport-hint" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- RIGHT — Inspector Panel -->
+            <ui:VisualElement name="inspector-panel" class="inspector-panel">
+                <ui:VisualElement class="inspector-header">
+                    <ui:Label text="INSPECTOR" class="inspector-title" />
+                </ui:VisualElement>
+                <ui:VisualElement name="inspector-empty" class="inspector-empty">
+                    <ui:Label text="🎯" class="empty-icon" />
+                    <ui:Label text="Select an asset" class="empty-text" />
+                    <ui:Label text="Click a tile to inspect" class="empty-hint" />
+                </ui:VisualElement>
+                <ui:ScrollView name="inspector-content" class="inspector-content hidden">
+                    <ui:VisualElement class="asset-preview">
+                        <ui:Label text="✈" name="preview-icon" class="preview-icon" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="asset-info">
+                        <ui:Label text="F-16 Falcon" name="asset-name" class="asset-name" />
+                        <ui:Label text="Multirole fighter" name="asset-description" class="asset-description" />
+                        <ui:VisualElement class="asset-category-badge">
+                            <ui:Label text="Aircraft" name="asset-category-label" class="category-badge-text" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="divider" />
+                    <ui:VisualElement class="inspector-section">
+                        <ui:Label text="FACTION" class="section-title" />
+                        <ui:VisualElement class="faction-buttons">
+                            <ui:Button text="🔵 BLUE" name="btn-faction-blue" class="faction-btn faction-btn-blue faction-btn-active" />
+                            <ui:Button text="🔴 RED" name="btn-faction-red" class="faction-btn faction-btn-red" />
+                            <ui:Button text="🟢 NEU" name="btn-faction-neutral" class="faction-btn faction-btn-neutral" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="divider" />
+                    <ui:VisualElement class="inspector-section">
+                        <ui:Label text="PROPERTIES" class="section-title" />
+                        <ui:VisualElement name="properties-container" class="properties-container" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="divider" />
+                    <ui:VisualElement class="inspector-section">
+                        <ui:Label text="QUANTITY" class="section-title" />
+                        <ui:VisualElement class="quantity-row">
+                            <ui:Button text="−" name="btn-qty-minus" class="qty-btn" />
+                            <ui:Label text="1" name="quantity-label" class="quantity-value" />
+                            <ui:Button text="+" name="btn-qty-plus" class="qty-btn" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="divider" />
+                    <ui:VisualElement class="inspector-actions">
+                        <ui:Button text="📌 Add to Scene" name="btn-add-scene" class="btn-primary action-btn" />
+                        <ui:Button text="👥 Add to Formation" name="btn-add-formation" class="btn-secondary action-btn" />
+                    </ui:VisualElement>
+                </ui:ScrollView>
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- ========== BOTTOM PANELS ========== -->
+        <ui:VisualElement name="bottom-panels" class="bottom-panels">
+
+            <!-- LEFT — Formation Builder -->
+            <ui:VisualElement name="formation-builder" class="formation-builder">
+                <ui:VisualElement class="formation-header">
+                    <ui:Label text="FORMATION BUILDER" class="formation-title" />
+                    <ui:Button text="+ New" name="btn-new-formation" class="toolbar-btn formation-new-btn" />
+                </ui:VisualElement>
+                <ui:VisualElement class="formation-content">
+                    <ui:VisualElement class="formation-canvas-area">
+                        <ui:VisualElement class="formation-name-row">
+                            <ui:TextField name="formation-name" value="Alpha Squadron" class="formation-name-field" />
+                            <ui:Label text="0 units" name="formation-unit-count" class="formation-count" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="formation-canvas" class="formation-canvas">
+                            <ui:Label text="▲ FRONT" class="canvas-direction" />
+                            <ui:VisualElement name="canvas-units" class="canvas-units" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="preset-buttons">
+                            <ui:Button text="V" name="btn-preset-v" class="preset-btn preset-btn-active" />
+                            <ui:Button text="▬" name="btn-preset-line" class="preset-btn" />
+                            <ui:Button text="│" name="btn-preset-column" class="preset-btn" />
+                            <ui:Button text="◆" name="btn-preset-diamond" class="preset-btn" />
+                            <ui:Button text="╲" name="btn-preset-echelon" class="preset-btn" />
+                            <ui:Button text="✦" name="btn-preset-custom" class="preset-btn" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="preset-labels">
+                            <ui:Label text="V-Form" class="preset-label" />
+                            <ui:Label text="Line" class="preset-label" />
+                            <ui:Label text="Column" class="preset-label" />
+                            <ui:Label text="Diamond" class="preset-label" />
+                            <ui:Label text="Echelon" class="preset-label" />
+                            <ui:Label text="Custom" class="preset-label" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="formation-units-list">
+                        <ui:Label text="UNITS IN FORMATION" class="units-list-title" />
+                        <ui:ScrollView name="formation-units-scroll" class="units-scroll">
+                            <ui:VisualElement name="units-list-container" class="units-list-container" />
+                        </ui:ScrollView>
+                        <ui:VisualElement class="formation-actions">
+                            <ui:Button text="📌 Drop to Scene" name="btn-drop-formation" class="btn-primary formation-drop-btn" />
+                            <ui:Button text="🗑 Clear" name="btn-clear-formation" class="btn-secondary formation-clear-btn" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- RIGHT — Scene Hierarchy -->
+            <ui:VisualElement name="scene-hierarchy" class="scene-hierarchy">
+                <ui:VisualElement class="hierarchy-header">
+                    <ui:Label text="SCENE HIERARCHY" class="hierarchy-title" />
+                    <ui:Label text="0 entities" name="entity-count" class="entity-count" />
+                </ui:VisualElement>
+                <ui:ScrollView name="hierarchy-scroll" class="hierarchy-scroll">
+                    <ui:Foldout text="🔵 BLUE FORCE" name="foldout-blue" value="true" class="faction-foldout faction-foldout-blue">
+                        <ui:VisualElement name="blue-force-list" class="faction-list">
+                            <ui:Label text="No units deployed" class="empty-faction-label" />
+                        </ui:VisualElement>
+                    </ui:Foldout>
+                    <ui:Foldout text="🔴 RED FORCE" name="foldout-red" value="true" class="faction-foldout faction-foldout-red">
+                        <ui:VisualElement name="red-force-list" class="faction-list">
+                            <ui:Label text="No units deployed" class="empty-faction-label" />
+                        </ui:VisualElement>
+                    </ui:Foldout>
+                    <ui:Foldout text="🟢 NEUTRAL" name="foldout-neutral" value="true" class="faction-foldout faction-foldout-neutral">
+                        <ui:VisualElement name="neutral-force-list" class="faction-list">
+                            <ui:Label text="No units deployed" class="empty-faction-label" />
+                        </ui:VisualElement>
+                    </ui:Foldout>
+                </ui:ScrollView>
+                <ui:VisualElement class="hierarchy-footer">
+                    <ui:Button text="🗑 Clear All" name="btn-clear-scene" class="btn-secondary hierarchy-clear-btn" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

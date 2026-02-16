@@ -1,0 +1,86 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <Style src="../Styles/Common.uss" />
+    <Style src="../Styles/FormationBuilder.uss" />
+
+    <!-- FORMATION BUILDER — Bottom-Left Panel -->
+    <ui:VisualElement name="formation-builder" class="formation-builder">
+
+        <!-- Header -->
+        <ui:VisualElement class="formation-header">
+            <ui:Label text="FORMATION BUILDER" class="formation-title" />
+            <ui:VisualElement class="formation-header-actions">
+                <ui:Button text="+ New" name="btn-new-formation" class="toolbar-btn formation-new-btn" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Main Content Area -->
+        <ui:VisualElement class="formation-content">
+
+            <!-- Left — Formation Canvas -->
+            <ui:VisualElement class="formation-canvas-area">
+
+                <!-- Formation Name -->
+                <ui:VisualElement class="formation-name-row">
+                    <ui:TextField name="formation-name" value="Alpha Squadron" class="formation-name-field" />
+                    <ui:Label text="4 units" name="formation-unit-count" class="formation-count" />
+                </ui:VisualElement>
+
+                <!-- Mini 2D Canvas (unit positions visualized here) -->
+                <ui:VisualElement name="formation-canvas" class="formation-canvas">
+                    <!-- Grid background -->
+                    <ui:VisualElement class="canvas-grid" />
+
+                    <!-- Direction indicator -->
+                    <ui:Label text="▲ FRONT" class="canvas-direction" />
+
+                    <!-- Unit dots container — populated by C# -->
+                    <ui:VisualElement name="canvas-units" class="canvas-units">
+                        <!-- Sample units for visual reference -->
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <!-- Preset Formation Buttons -->
+                <ui:VisualElement class="preset-buttons">
+                    <ui:Button text="V" name="btn-preset-v" class="preset-btn preset-btn-active" />
+                    <ui:Button text="▬" name="btn-preset-line" class="preset-btn" />
+                    <ui:Button text="│" name="btn-preset-column" class="preset-btn" />
+                    <ui:Button text="◆" name="btn-preset-diamond" class="preset-btn" />
+                    <ui:Button text="╲" name="btn-preset-echelon" class="preset-btn" />
+                    <ui:Button text="✦" name="btn-preset-custom" class="preset-btn" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="preset-labels">
+                    <ui:Label text="V-Form" class="preset-label" />
+                    <ui:Label text="Line" class="preset-label" />
+                    <ui:Label text="Column" class="preset-label" />
+                    <ui:Label text="Diamond" class="preset-label" />
+                    <ui:Label text="Echelon" class="preset-label" />
+                    <ui:Label text="Custom" class="preset-label" />
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+            <!-- Right — Formation Unit List -->
+            <ui:VisualElement class="formation-units-list">
+                <ui:Label text="UNITS IN FORMATION" class="units-list-title" />
+
+                <ui:ScrollView name="formation-units-scroll" class="units-scroll">
+                    <!-- Unit entries populated by C# -->
+                    <ui:VisualElement name="units-list-container" class="units-list-container">
+                    </ui:VisualElement>
+                </ui:ScrollView>
+
+                <!-- Formation Actions -->
+                <ui:VisualElement class="formation-actions">
+                    <ui:Button text="📌 Drop to Scene" name="btn-drop-formation" class="btn-primary formation-drop-btn" />
+                    <ui:Button text="🗑 Clear" name="btn-clear-formation" class="btn-secondary formation-clear-btn" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

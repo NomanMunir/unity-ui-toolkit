@@ -1,89 +1,97 @@
 # Unity UI Toolkit — Learning Examples
 
-## 📋 Setup Instructions
+## Example 1: Main Menu + HUD
 
-### 1. Copy Files
-
-Copy the entire `Assets/` folder contents into your Unity project's `Assets/` folder.
-
-### 2. Create Scenes
-
-In Unity:
+### Setup Main Menu Scene
 
 1. **File → New Scene** → Save as `Assets/Scenes/MainMenuScene.unity`
-2. **File → New Scene** → Save as `Assets/Scenes/GameScene.unity`
+2. Create empty GameObject → name `UIManager`
+3. Add `MainMenuController.cs` script
+4. On the **UIDocument** component:
+   - **Panel Settings**: Create via `Right-click → Create → UI Toolkit → Panel Settings Asset` (save as `Assets/UI/DefaultPanelSettings`) or reuse existing
+   - **Source Asset**: `Assets/UI/Documents/MainMenu.uxml`
+5. Recommended Panel Settings: Scale Mode = `Scale With Screen Size`, Reference Resolution = `1920×1080`
 
-### 3. Setup Main Menu Scene (`MainMenuScene`)
+### Setup Game Scene
 
-1. Open `MainMenuScene`
-2. Create an empty GameObject → name it `UIManager`
-3. Add the `MainMenuController.cs` script to it
-4. In the Inspector, assign:
-   - **Menu Document**: drag `Assets/UI/Documents/MainMenu.uxml`
-   - **Menu Stylesheet**: drag `Assets/UI/Styles/MainMenu.uss`
-
-### 4. Setup Game Scene (`GameScene`)
-
-1. Open `GameScene`
-2. Create an empty GameObject → name it `HUDManager`
-3. Add the `HUDController.cs` script to it
-4. In the Inspector, assign:
-   - **HUD Document**: drag `Assets/UI/Documents/HUD.uxml`
-   - **HUD Stylesheet**: drag `Assets/UI/Styles/HUD.uss`
-
-### 5. Add Scenes to Build Settings
-
-1. **File → Build Settings**
-2. Add both scenes (MainMenuScene at index 0, GameScene at index 1)
-
-### 6. Required Components
-
-Each scene needs a **UIDocument** component on a GameObject:
-
-- The controller scripts handle this automatically via `[RequireComponent(typeof(UIDocument))]`
+1. **File → New Scene** → Save as `Assets/Scenes/GameScene.unity`
+2. Create empty GameObject → name `HUDManager`
+3. Add `HUDController.cs` script
+4. On the **UIDocument** component:
+   - **Panel Settings**: Same `DefaultPanelSettings`
+   - **Source Asset**: `Assets/UI/Documents/HUD.uxml`
+5. Add both scenes to **File → Build Profiles** (MainMenuScene=0, GameScene=1)
 
 ---
 
-## 📁 Folder Structure
+## Example 2: Scenario Creator (4-Panel Workspace)
+
+A simulation scenario creation tool with asset browser, inspector, formation builder, and scene hierarchy.
+
+### Setup
+
+1. **File → New Scene** → Save as `Assets/Scenes/ScenarioCreatorScene.unity`
+2. Create empty GameObject → name `ScenarioCreator`
+3. Add `ScenarioCreatorUI.cs` script
+4. On the **UIDocument** component:
+   - **Panel Settings**: Same `DefaultPanelSettings`
+   - **Source Asset**: `Assets/UI/Documents/ScenarioCreator.uxml`
+5. Hit **Play** — everything is wired automatically
+
+### How It Works
+
+- **Left**: Asset Browser — click tiles to select assets
+- **Right**: Inspector — configure properties, choose faction, add to scene or formation
+- **Bottom-Left**: Formation Builder — group units, choose preset arrangements (V, Line, Diamond...)
+- **Bottom-Right**: Scene Hierarchy — tracks all placed entities by faction
+
+### Workflow
+
+1. Click an asset tile in the browser (e.g., F-16)
+2. Configure properties in the inspector (speed, altitude, loadout)
+3. Choose faction (Blue/Red/Neutral)
+4. Either "Add to Scene" directly, or "Add to Formation"
+5. In formation builder: add multiple units, pick arrangement preset
+6. Click "Drop to Scene" to place the whole formation
+
+---
+
+## Folder Structure
 
 ```
 Assets/
 ├── UI/
-│   ├── Documents/          # UXML files (structure — like HTML)
-│   │   ├── MainMenu.uxml
-│   │   ├── SettingsPanel.uxml
-│   │   └── HUD.uxml
-│   ├── Styles/             # USS files (styling — like CSS)
-│   │   ├── Common.uss
+│   ├── Documents/
+│   │   ├── MainMenu.uxml          ← Main menu example
+│   │   ├── HUD.uxml               ← Game HUD example
+│   │   ├── ScenarioCreator.uxml   ← Scenario creator (master layout)
+│   │   └── Components/            ← Individual panel documents
+│   │       ├── Toolbar.uxml
+│   │       ├── AssetBrowser.uxml
+│   │       ├── InspectorPanel.uxml
+│   │       ├── FormationBuilder.uxml
+│   │       └── SceneHierarchy.uxml
+│   ├── Styles/
+│   │   ├── Common.uss             ← Shared design tokens
 │   │   ├── MainMenu.uss
-│   │   └── HUD.uss
-│   └── Scripts/            # C# scripts (logic — like JS)
+│   │   ├── HUD.uss
+│   │   ├── ScenarioCreator.uss
+│   │   ├── Toolbar.uss
+│   │   ├── AssetBrowser.uss
+│   │   ├── InspectorPanel.uss
+│   │   ├── FormationBuilder.uss
+│   │   └── SceneHierarchy.uss
+│   └── Scripts/
 │       ├── MainMenuController.cs
-│       ├── SettingsController.cs
-│       └── HUDController.cs
-├── Scenes/
-│   ├── MainMenuScene.unity  # (create in Unity)
-│   └── GameScene.unity      # (create in Unity)
-└── README.md
+│       ├── HUDController.cs
+│       ├── ScenarioCreatorUI.cs   ← Master controller
+│       ├── AssetBrowserUI.cs
+│       ├── InspectorPanelUI.cs
+│       ├── FormationBuilderUI.cs
+│       ├── SceneHierarchyUI.cs
+│       └── Data/
+│           ├── SimulationAsset.cs  ← Asset data model
+│           ├── Formation.cs        ← Formation data model
+│           └── AssetDatabase.cs    ← Sample data (16 assets)
+└── Scenes/                         ← Create these in Unity
 ```
-
-## 🧠 Learning Notes
-
-### UXML = HTML equivalent
-
-- Defines **what** elements exist and their hierarchy
-- Uses XML syntax with Unity-specific tags
-- Elements have `name` attributes for C# queries (like `id` in HTML)
-
-### USS = CSS equivalent
-
-- Defines **how** elements look
-- Supports selectors: `#name`, `.class`, `Type`
-- Uses Unity-specific properties (similar but not identical to CSS)
-- Supports pseudo-classes: `:hover`, `:active`, `:focus`, `:checked`
-
-### C# = JavaScript equivalent
-
-- Queries elements using `rootVisualElement.Q<Type>("name")`
-- Registers event callbacks (like `addEventListener`)
-- Manipulates the visual tree at runtime

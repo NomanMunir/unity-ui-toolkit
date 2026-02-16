@@ -1,0 +1,71 @@
+/*
+ * ============================================
+ *  ScenarioCreator.uss — Master Layout Styles
+ * ============================================
+ *  Defines the 4-panel workspace layout.
+ *  Panel sizes are fixed for simplicity.
+ */
+
+/* ── App Root — Full Screen ── */
+.app-root {
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-bg-dark);
+}
+
+/* ── Main Content — Middle row (Browser + Viewport + Inspector) ── */
+.main-content {
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+/* ── Viewport — Center area ── */
+.viewport {
+    flex-grow: 1;
+    background-color: #060a14;
+    border-width: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.viewport-content {
+    align-items: center;
+    opacity: 0.3;
+}
+
+.viewport-icon {
+    font-size: 64px;
+    margin-bottom: var(--spacing-md);
+}
+
+.viewport-text {
+    font-size: var(--font-lg);
+    color: var(--color-text-muted);
+    letter-spacing: 4px;
+    -unity-font-style: bold;
+    margin-bottom: var(--spacing-xs);
+}
+
+.viewport-hint {
+    font-size: var(--font-sm);
+    color: var(--color-text-muted);
+}
+
+/* ── Bottom Panels — Split horizontally ── */
+.bottom-panels {
+    flex-direction: row;
+    height: 280px;
+    min-height: 280px;
+    max-height: 280px;
+    border-top-width: 1px;
+    border-color: var(--color-border);
+}
+
+/* ── Hidden utility (reused across panels) ── */
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: flex;
+}

@@ -1,0 +1,82 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <Style src="../Styles/Common.uss" />
+    <Style src="../Styles/AssetBrowser.uss" />
+
+    <!-- ASSET BROWSER — Left Sidebar -->
+    <ui:VisualElement name="asset-browser" class="asset-browser">
+
+        <!-- Header -->
+        <ui:VisualElement class="browser-header">
+            <ui:Label text="ASSETS" class="browser-title" />
+        </ui:VisualElement>
+
+        <!-- Search Bar -->
+        <ui:VisualElement class="search-container">
+            <ui:TextField name="search-field" class="search-field">
+                <ui:Label text="🔍 Search assets..." class="search-placeholder" />
+            </ui:TextField>
+        </ui:VisualElement>
+
+        <!-- Category Filter Tabs -->
+        <ui:VisualElement name="category-tabs" class="category-tabs">
+            <ui:Button text="All" name="tab-all" class="category-tab category-tab-active" />
+            <ui:Button text="✈" name="tab-aircraft" class="category-tab" />
+            <ui:Button text="🛡" name="tab-ground" class="category-tab" />
+            <ui:Button text="🚢" name="tab-naval" class="category-tab" />
+            <ui:Button text="🎖" name="tab-infantry" class="category-tab" />
+            <ui:Button text="🏗" name="tab-structures" class="category-tab" />
+            <ui:Button text="📡" name="tab-sensors" class="category-tab" />
+        </ui:VisualElement>
+
+        <!-- Scrollable Asset Grid -->
+        <ui:ScrollView name="asset-scroll" class="asset-scroll">
+
+            <!-- Aircraft Category -->
+            <ui:Foldout text="✈ Aircraft" name="foldout-aircraft" value="true" class="category-foldout">
+                <ui:VisualElement name="grid-aircraft" class="asset-grid">
+                    <!-- Tiles populated dynamically by C# -->
+                </ui:VisualElement>
+            </ui:Foldout>
+
+            <!-- Ground Vehicles Category -->
+            <ui:Foldout text="🛡 Ground Vehicles" name="foldout-ground" value="true" class="category-foldout">
+                <ui:VisualElement name="grid-ground" class="asset-grid">
+                </ui:VisualElement>
+            </ui:Foldout>
+
+            <!-- Naval Category -->
+            <ui:Foldout text="🚢 Naval" name="foldout-naval" value="true" class="category-foldout">
+                <ui:VisualElement name="grid-naval" class="asset-grid">
+                </ui:VisualElement>
+            </ui:Foldout>
+
+            <!-- Infantry Category -->
+            <ui:Foldout text="🎖 Infantry" name="foldout-infantry" value="true" class="category-foldout">
+                <ui:VisualElement name="grid-infantry" class="asset-grid">
+                </ui:VisualElement>
+            </ui:Foldout>
+
+            <!-- Structures Category -->
+            <ui:Foldout text="🏗 Structures" name="foldout-structures" value="true" class="category-foldout">
+                <ui:VisualElement name="grid-structures" class="asset-grid">
+                </ui:VisualElement>
+            </ui:Foldout>
+
+            <!-- Sensors Category -->
+            <ui:Foldout text="📡 Sensors" name="foldout-sensors" value="true" class="category-foldout">
+                <ui:VisualElement name="grid-sensors" class="asset-grid">
+                </ui:VisualElement>
+            </ui:Foldout>
+
+        </ui:ScrollView>
+
+        <!-- Asset Count Footer -->
+        <ui:VisualElement class="browser-footer">
+            <ui:Label text="16 assets" name="asset-count" class="asset-count-label" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

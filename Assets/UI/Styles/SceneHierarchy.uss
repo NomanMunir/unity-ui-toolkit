@@ -1,0 +1,201 @@
+/* SceneHierarchy.uss — Bottom-right scene hierarchy styles */
+
+.scene-hierarchy {
+    flex-grow: 1;
+    background-color: #0d1220;
+}
+
+.hierarchy-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom-width: 1px;
+    border-color: var(--color-border);
+}
+
+.hierarchy-title {
+    font-size: 10px;
+    color: var(--color-text-muted);
+    letter-spacing: 2px;
+    -unity-font-style: bold;
+}
+
+.entity-count {
+    font-size: 10px;
+    color: var(--color-text-muted);
+}
+
+/* ── Scrollable Area ── */
+.hierarchy-scroll {
+    flex-grow: 1;
+    padding: var(--spacing-xs);
+}
+
+/* ── Faction Foldouts ── */
+.faction-foldout {
+    margin-bottom: var(--spacing-xs);
+}
+
+.faction-foldout > .unity-foldout__toggle {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+}
+
+.faction-foldout > .unity-foldout__toggle > .unity-foldout__text {
+    font-size: 11px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+.faction-foldout-blue > .unity-foldout__toggle {
+    background-color: rgba(33, 150, 243, 0.08);
+}
+.faction-foldout-blue > .unity-foldout__toggle > .unity-foldout__text {
+    color: #90caf9;
+}
+
+.faction-foldout-red > .unity-foldout__toggle {
+    background-color: rgba(244, 67, 54, 0.08);
+}
+.faction-foldout-red > .unity-foldout__toggle > .unity-foldout__text {
+    color: #ef9a9a;
+}
+
+.faction-foldout-neutral > .unity-foldout__toggle {
+    background-color: rgba(76, 175, 80, 0.08);
+}
+.faction-foldout-neutral > .unity-foldout__toggle > .unity-foldout__text {
+    color: #a5d6a7;
+}
+
+.faction-list {
+    padding-left: var(--spacing-sm);
+}
+
+.empty-faction-label {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    opacity: 0.5;
+    -unity-font-style: italic;
+    padding: var(--spacing-xs) 0;
+}
+
+/* ── Hierarchy Entry (placed asset) ── */
+.hierarchy-entry {
+    flex-direction: row;
+    align-items: center;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    margin-bottom: 1px;
+    border-radius: var(--radius-sm);
+    cursor: link;
+
+    transition-property: background-color;
+    transition-duration: var(--transition-fast);
+}
+
+.hierarchy-entry:hover {
+    background-color: var(--color-bg-hover);
+}
+
+.hierarchy-entry-selected {
+    background-color: rgba(79, 195, 247, 0.15);
+    border-width: 1px;
+    border-color: var(--color-primary);
+}
+
+.hierarchy-entry-icon {
+    font-size: 14px;
+    width: 22px;
+    -unity-text-align: middle-center;
+    margin-right: var(--spacing-xs);
+}
+
+.hierarchy-entry-name {
+    font-size: 12px;
+    color: var(--color-text);
+    flex-grow: 1;
+}
+
+.hierarchy-entry-id {
+    font-size: 9px;
+    color: var(--color-text-muted);
+    opacity: 0.5;
+    margin-right: var(--spacing-xs);
+}
+
+.hierarchy-entry-remove {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+    color: transparent;
+    cursor: link;
+    -unity-text-align: middle-center;
+}
+
+.hierarchy-entry:hover .hierarchy-entry-remove {
+    color: var(--color-text-muted);
+}
+
+.hierarchy-entry-remove:hover {
+    color: var(--color-danger);
+}
+
+/* ── Formation Group ── */
+.formation-group {
+    margin-bottom: var(--spacing-xs);
+}
+
+.formation-group-header {
+    flex-direction: row;
+    align-items: center;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: rgba(124, 77, 255, 0.1);
+    border-radius: var(--radius-sm);
+    border-width: 1px;
+    border-color: rgba(124, 77, 255, 0.3);
+    cursor: link;
+}
+
+.formation-group-header:hover {
+    background-color: rgba(124, 77, 255, 0.2);
+}
+
+.formation-group-icon {
+    font-size: 12px;
+    margin-right: var(--spacing-xs);
+}
+
+.formation-group-name {
+    font-size: 12px;
+    color: var(--color-accent-hover);
+    -unity-font-style: bold;
+    flex-grow: 1;
+}
+
+.formation-group-count {
+    font-size: 10px;
+    color: var(--color-text-muted);
+}
+
+.formation-group-children {
+    padding-left: var(--spacing-md);
+    border-left-width: 1px;
+    border-color: rgba(124, 77, 255, 0.2);
+    margin-left: var(--spacing-md);
+}
+
+/* ── Footer ── */
+.hierarchy-footer {
+    padding: var(--spacing-sm);
+    border-top-width: 1px;
+    border-color: var(--color-border);
+}
+
+.hierarchy-clear-btn {
+    height: 28px;
+    font-size: 11px;
+}

@@ -1,0 +1,323 @@
+/* InspectorPanel.uss — Right sidebar inspector styles */
+
+.inspector-panel {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+    background-color: #0d1220;
+    border-left-width: 1px;
+    border-color: var(--color-border);
+}
+
+.inspector-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md);
+    border-bottom-width: 1px;
+    border-color: var(--color-border);
+}
+
+.inspector-title {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    letter-spacing: 3px;
+    -unity-font-style: bold;
+}
+
+.inspector-close-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+    color: var(--color-text-muted);
+    cursor: link;
+}
+
+.inspector-close-btn:hover {
+    color: var(--color-danger);
+}
+
+/* ── Empty State ── */
+.inspector-empty {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.4;
+}
+
+.empty-text {
+    font-size: var(--font-md);
+    color: var(--color-text-muted);
+    -unity-font-style: bold;
+    margin-bottom: var(--spacing-xs);
+}
+
+.empty-hint {
+    font-size: var(--font-xs);
+    color: var(--color-text-muted);
+    -unity-text-align: middle-center;
+    opacity: 0.6;
+    white-space: normal;
+}
+
+/* ── Content Area ── */
+.inspector-content {
+    flex-grow: 1;
+}
+
+/* ── Asset Preview ── */
+.asset-preview {
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    margin: var(--spacing-md);
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-lg);
+    border-width: 1px;
+    border-color: var(--color-border);
+}
+
+.preview-icon {
+    font-size: 48px;
+    -unity-text-align: middle-center;
+}
+
+/* ── Asset Info ── */
+.asset-info {
+    align-items: center;
+    padding: 0 var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.asset-name {
+    font-size: var(--font-lg);
+    color: var(--color-text-bright);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    margin-bottom: var(--spacing-xs);
+}
+
+.asset-description {
+    font-size: var(--font-xs);
+    color: var(--color-text-muted);
+    -unity-text-align: middle-center;
+    white-space: normal;
+    margin-bottom: var(--spacing-sm);
+}
+
+.asset-category-badge {
+    background-color: rgba(79, 195, 247, 0.15);
+    border-radius: var(--radius-sm);
+    padding: 2px var(--spacing-sm);
+}
+
+.category-badge-text {
+    font-size: 10px;
+    color: var(--color-primary);
+    letter-spacing: 1px;
+    -unity-font-style: bold;
+}
+
+/* ── Inspector Sections ── */
+.inspector-section {
+    padding: 0 var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.inspector-section .section-title {
+    font-size: 10px;
+    color: var(--color-text-muted);
+    letter-spacing: 2px;
+    -unity-font-style: bold;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* ── Faction Buttons ── */
+.faction-buttons {
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.faction-btn {
+    flex-grow: 1;
+    height: 32px;
+    font-size: 11px;
+    margin-left: 2px;
+    margin-right: 2px;
+    background-color: var(--color-bg-card);
+    border-width: 1px;
+    border-color: var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    cursor: link;
+
+    transition-property: background-color, border-color;
+    transition-duration: var(--transition-fast);
+}
+
+.faction-btn:hover {
+    background-color: var(--color-bg-hover);
+}
+
+.faction-btn-blue.faction-btn-active {
+    background-color: rgba(33, 150, 243, 0.2);
+    border-color: #2196f3;
+    color: #90caf9;
+}
+
+.faction-btn-red.faction-btn-active {
+    background-color: rgba(244, 67, 54, 0.2);
+    border-color: #f44336;
+    color: #ef9a9a;
+}
+
+.faction-btn-neutral.faction-btn-active {
+    background-color: rgba(76, 175, 80, 0.2);
+    border-color: #4caf50;
+    color: #a5d6a7;
+}
+
+/* ── Properties Container ── */
+.properties-container {
+    /* Dynamic rows go here */
+}
+
+/* Individual property row */
+.property-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-xs) 0;
+    min-height: 30px;
+}
+
+.property-label {
+    font-size: 12px;
+    color: var(--color-text);
+    width: 90px;
+    min-width: 90px;
+}
+
+.property-control {
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+}
+
+.property-slider {
+    flex-grow: 1;
+}
+
+.property-slider .unity-base-slider__dragger {
+    background-color: var(--color-primary);
+    border-radius: var(--radius-full);
+    width: 14px;
+    height: 14px;
+    margin-top: -5px;
+}
+
+.property-slider .unity-base-slider__tracker {
+    background-color: var(--color-bg-card);
+    border-color: var(--color-border);
+    border-width: 1px;
+    border-radius: 2px;
+    height: 4px;
+}
+
+.property-value {
+    font-size: 11px;
+    color: var(--color-primary);
+    -unity-font-style: bold;
+    width: 55px;
+    -unity-text-align: middle-right;
+    margin-left: var(--spacing-xs);
+}
+
+.property-dropdown {
+    flex-grow: 1;
+    height: 24px;
+    font-size: 11px;
+    background-color: var(--color-bg-card);
+    border-color: var(--color-border);
+    border-width: 1px;
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+}
+
+.property-toggle .unity-toggle__checkmark {
+    background-color: var(--color-bg-card);
+    border-color: var(--color-border);
+    border-width: 2px;
+    border-radius: var(--radius-sm);
+    width: 20px;
+    height: 20px;
+}
+
+.property-toggle:checked .unity-toggle__checkmark {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary-hover);
+}
+
+/* ── Quantity Row ── */
+.quantity-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.qty-btn {
+    width: 36px;
+    height: 36px;
+    font-size: var(--font-lg);
+    background-color: var(--color-bg-card);
+    border-width: 1px;
+    border-color: var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    cursor: link;
+    -unity-text-align: middle-center;
+    padding: 0;
+
+    transition-property: background-color, border-color;
+    transition-duration: var(--transition-fast);
+}
+
+.qty-btn:hover {
+    background-color: var(--color-bg-hover);
+    border-color: var(--color-primary);
+}
+
+.quantity-value {
+    font-size: var(--font-xl);
+    color: var(--color-text-bright);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    width: 60px;
+}
+
+/* ── Action Buttons ── */
+.inspector-actions {
+    padding: var(--spacing-md);
+}
+
+.action-btn {
+    height: 40px;
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-sm);
+    letter-spacing: 1px;
+}
+
+/* Divider override for inspector */
+.inspector-panel .divider {
+    margin-left: var(--spacing-md);
+    margin-right: var(--spacing-md);
+}

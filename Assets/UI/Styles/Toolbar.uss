@@ -1,0 +1,107 @@
+/* Toolbar.uss — Top toolbar styles */
+
+.toolbar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    min-height: 48px;
+    background-color: #0d1117;
+    border-bottom-width: 1px;
+    border-color: var(--color-border);
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+}
+
+.toolbar-section {
+    flex-direction: row;
+    align-items: center;
+}
+
+.toolbar-left {
+    flex-grow: 0;
+}
+
+.toolbar-center {
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.toolbar-right {
+    flex-grow: 0;
+}
+
+.toolbar-title {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    letter-spacing: 3px;
+    margin-right: var(--spacing-sm);
+}
+
+.scenario-name-field {
+    width: 200px;
+    height: 28px;
+    font-size: var(--font-sm);
+    background-color: var(--color-bg-card);
+    border-color: var(--color-border);
+    border-width: 1px;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-bright);
+}
+
+.scenario-name-field:focus {
+    border-color: var(--color-primary);
+}
+
+.toolbar-btn {
+    height: 32px;
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+    margin-left: 2px;
+    margin-right: 2px;
+    font-size: 12px;
+    color: var(--color-text);
+    background-color: transparent;
+    border-width: 1px;
+    border-color: transparent;
+    border-radius: var(--radius-sm);
+    cursor: link;
+
+    transition-property: background-color, border-color;
+    transition-duration: var(--transition-fast);
+}
+
+.toolbar-btn:hover {
+    background-color: var(--color-bg-hover);
+    border-color: var(--color-border);
+}
+
+.toolbar-btn:active {
+    background-color: var(--color-bg-card);
+}
+
+.toolbar-btn-play {
+    color: var(--color-success);
+    border-color: rgba(105, 240, 174, 0.3);
+}
+
+.toolbar-btn-play:hover {
+    background-color: rgba(105, 240, 174, 0.15);
+    border-color: var(--color-success);
+}
+
+.toolbar-btn-icon {
+    width: 32px;
+    padding: 0;
+    font-size: 16px;
+    -unity-text-align: middle-center;
+}
+
+.toolbar-separator {
+    width: 1px;
+    height: 24px;
+    background-color: var(--color-border);
+    margin-left: var(--spacing-sm);
+    margin-right: var(--spacing-sm);
+}
