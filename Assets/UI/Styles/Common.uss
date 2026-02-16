@@ -1,0 +1,312 @@
+/*
+ * ============================================
+ *  Common.uss — Shared Design Tokens & Utilities
+ * ============================================
+ *  This is like your global CSS file.
+ *  Import this in other USS files using: @import url("Common.uss");
+ *
+ *  USS (Unity Style Sheets) works like CSS but with some differences:
+ *  - Properties use Unity naming (e.g., -unity-font-style, not font-style)
+ *  - Colors can be hex, rgb(), rgba(), or named colors
+ *  - Units: px (pixels), % (percentage) — no em, rem, vw, vh
+ *  - Flexbox is the ONLY layout system (no grid, no float)
+ */
+
+
+/* ============================================
+ *  ROOT VARIABLES (CSS Custom Properties)
+ * ============================================
+ *  USS supports variables with :root selector,
+ *  just like CSS custom properties!
+ */
+:root {
+    /* --- Color Palette --- */
+    --color-bg-dark:        #0a0e1a;
+    --color-bg-panel:       rgba(15, 20, 40, 0.95);
+    --color-bg-card:        rgba(25, 35, 60, 0.8);
+    --color-bg-hover:       rgba(40, 55, 90, 0.6);
+
+    --color-primary:        #4fc3f7;
+    --color-primary-hover:  #81d4fa;
+    --color-primary-dark:   #0288d1;
+
+    --color-accent:         #7c4dff;
+    --color-accent-hover:   #b388ff;
+
+    --color-success:        #69f0ae;
+    --color-warning:        #ffd740;
+    --color-danger:         #ff5252;
+
+    --color-text:           #e0e6f0;
+    --color-text-muted:     #8892a4;
+    --color-text-bright:    #ffffff;
+
+    --color-border:         rgba(79, 195, 247, 0.2);
+    --color-border-hover:   rgba(79, 195, 247, 0.5);
+
+    /* --- Spacing --- */
+    --spacing-xs:   4px;
+    --spacing-sm:   8px;
+    --spacing-md:   16px;
+    --spacing-lg:   24px;
+    --spacing-xl:   32px;
+    --spacing-2xl:  48px;
+
+    /* --- Border Radius --- */
+    --radius-sm:    4px;
+    --radius-md:    8px;
+    --radius-lg:    12px;
+    --radius-xl:    16px;
+    --radius-full:  50%;
+
+    /* --- Font Sizes --- */
+    --font-xs:      12px;
+    --font-sm:      14px;
+    --font-md:      16px;
+    --font-lg:      20px;
+    --font-xl:      24px;
+    --font-2xl:     32px;
+    --font-3xl:     48px;
+
+    /* --- Transitions --- */
+    --transition-fast:    150ms;
+    --transition-normal:  300ms;
+    --transition-slow:    500ms;
+}
+
+
+/* ============================================
+ *  TYPOGRAPHY
+ * ============================================ */
+
+/* Title - Large heading */
+.text-title {
+    font-size: var(--font-3xl);
+    color: var(--color-text-bright);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    letter-spacing: 2px;
+}
+
+/* Subtitle */
+.text-subtitle {
+    font-size: var(--font-lg);
+    color: var(--color-text-muted);
+    -unity-text-align: middle-center;
+}
+
+/* Body text */
+.text-body {
+    font-size: var(--font-md);
+    color: var(--color-text);
+}
+
+/* Small / caption text */
+.text-small {
+    font-size: var(--font-sm);
+    color: var(--color-text-muted);
+}
+
+
+/* ============================================
+ *  BUTTONS
+ * ============================================
+ *  USS supports pseudo-classes just like CSS:
+ *  :hover, :active, :focus, :disabled, :checked
+ */
+
+/* Primary Button */
+.btn-primary {
+    background-color: var(--color-primary-dark);
+    color: var(--color-text-bright);
+    border-width: 2px;
+    border-color: var(--color-primary);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm) var(--spacing-xl);
+    font-size: var(--font-md);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    cursor: link;
+
+    /* Transitions (USS syntax) */
+    transition-property: background-color, border-color, scale;
+    transition-duration: var(--transition-fast);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary-hover);
+    scale: 1.05;
+}
+
+.btn-primary:active {
+    background-color: var(--color-primary-dark);
+    scale: 0.98;
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+/* Secondary Button — Ghost/outline style */
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-text);
+    border-width: 1px;
+    border-color: var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-sm);
+    -unity-text-align: middle-center;
+    cursor: link;
+
+    transition-property: background-color, border-color, color;
+    transition-duration: var(--transition-fast);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-bg-hover);
+    border-color: var(--color-border-hover);
+    color: var(--color-text-bright);
+}
+
+/* Danger Button */
+.btn-danger {
+    background-color: rgba(255, 82, 82, 0.2);
+    color: var(--color-danger);
+    border-width: 1px;
+    border-color: var(--color-danger);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-md);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    cursor: link;
+
+    transition-property: background-color, scale;
+    transition-duration: var(--transition-fast);
+}
+
+.btn-danger:hover {
+    background-color: rgba(255, 82, 82, 0.4);
+    scale: 1.05;
+}
+
+
+/* ============================================
+ *  PANELS & CARDS
+ * ============================================ */
+
+/* Glass-like panel */
+.panel {
+    background-color: var(--color-bg-panel);
+    border-width: 1px;
+    border-color: var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+}
+
+/* Card within a panel */
+.card {
+    background-color: var(--color-bg-card);
+    border-width: 1px;
+    border-color: var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+
+    transition-property: background-color, border-color;
+    transition-duration: var(--transition-fast);
+}
+
+.card:hover {
+    background-color: var(--color-bg-hover);
+    border-color: var(--color-border-hover);
+}
+
+
+/* ============================================
+ *  LAYOUT UTILITIES
+ * ============================================
+ *  UI Toolkit uses Flexbox exclusively.
+ *  Default flex-direction is "column" (vertical).
+ */
+
+/* Center everything */
+.flex-center {
+    align-items: center;
+    justify-content: center;
+}
+
+/* Horizontal row */
+.flex-row {
+    flex-direction: row;
+    align-items: center;
+}
+
+/* Vertical column (default, but explicit) */
+.flex-column {
+    flex-direction: column;
+}
+
+/* Fill available space */
+.flex-grow {
+    flex-grow: 1;
+}
+
+/* Gap utilities */
+.gap-sm {
+    /* USS doesn't have gap, use margin on children instead */
+}
+
+
+/* ============================================
+ *  SLIDER STYLING
+ * ============================================ */
+.slider-styled .unity-base-slider__dragger {
+    background-color: var(--color-primary);
+    border-radius: var(--radius-full);
+    width: 20px;
+    height: 20px;
+    margin-top: -8px;
+}
+
+.slider-styled .unity-base-slider__tracker {
+    background-color: var(--color-bg-card);
+    border-color: var(--color-border);
+    border-width: 1px;
+    border-radius: var(--radius-sm);
+    height: 6px;
+}
+
+
+/* ============================================
+ *  TOGGLE / CHECKBOX STYLING
+ * ============================================ */
+.toggle-styled .unity-toggle__checkmark {
+    background-color: var(--color-bg-card);
+    border-color: var(--color-border);
+    border-width: 2px;
+    border-radius: var(--radius-sm);
+    width: 24px;
+    height: 24px;
+
+    transition-property: background-color, border-color;
+    transition-duration: var(--transition-fast);
+}
+
+.toggle-styled:checked .unity-toggle__checkmark {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary-hover);
+}
+
+
+/* ============================================
+ *  DIVIDER / SEPARATOR
+ * ============================================ */
+.divider {
+    height: 1px;
+    background-color: var(--color-border);
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}

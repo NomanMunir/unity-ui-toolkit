@@ -1,0 +1,283 @@
+/*
+ * ============================================
+ *  MainMenu.uss — Main Menu Specific Styles
+ * ============================================
+ *
+ *  USS SELECTOR REFERENCE:
+ *  ─────────────────────────────────────────
+ *  #name          → Matches element with name="name"     (like CSS #id)
+ *  .class         → Matches element with class="class"   (like CSS .class)
+ *  Type           → Matches element type                 (like CSS element selector)
+ *  Parent > Child → Direct child selector                (like CSS >)
+ *  Parent Child   → Descendant selector                  (like CSS space)
+ *
+ *  IMPORTANT USS vs CSS differences:
+ *  - "name" attribute = CSS "id" → selected with #
+ *  - No shorthand properties (must write border-width, border-color separately)
+ *  - background-image instead of background: url()
+ *  - -unity- prefix for Unity-specific properties
+ */
+
+
+/* ============================================
+ *  FULL SCREEN ROOT
+ * ============================================ */
+.menu-root {
+    /* Fill the entire screen */
+    width: 100%;
+    height: 100%;
+
+    /* Center the menu panel */
+    align-items: center;
+    justify-content: center;
+
+    /* Dark gradient background */
+    background-color: var(--color-bg-dark);
+}
+
+/* Semi-transparent overlay for depth */
+.menu-bg-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+
+/* ============================================
+ *  MENU PANEL — The centered card
+ * ============================================ */
+.menu-panel {
+    /* Size */
+    width: 420px;
+    min-height: 500px;
+
+    /* Panel styling (extends .panel from Common.uss) */
+    background-color: var(--color-bg-panel);
+    border-width: 1px;
+    border-color: var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl) var(--spacing-xl);
+
+    /* Center content vertically */
+    align-items: center;
+    justify-content: center;
+
+    /* Absolute positioning so panels can stack */
+    position: absolute;
+
+    /* Fade-in transition */
+    transition-property: opacity, scale;
+    transition-duration: var(--transition-normal);
+}
+
+
+/* ============================================
+ *  VISIBILITY
+ * ============================================
+ *  USS uses "display: none" to hide elements,
+ *  just like CSS. We can also use "visibility: hidden"
+ *  which keeps the space but makes it invisible.
+ */
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: flex;
+}
+
+
+/* ============================================
+ *  TITLE SECTION
+ * ============================================ */
+.title-container {
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.game-title {
+    font-size: 52px;
+    color: var(--color-primary);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    letter-spacing: 6px;
+
+    /* Text shadow effect using border trick */
+    text-shadow: 0 0 10px var(--color-primary);
+}
+
+.game-subtitle {
+    font-size: var(--font-sm);
+    color: var(--color-text-muted);
+    -unity-text-align: middle-center;
+    margin-top: var(--spacing-xs);
+    letter-spacing: 1px;
+}
+
+.menu-divider {
+    width: 80%;
+    align-self: center;
+    background-color: var(--color-border);
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+
+/* ============================================
+ *  MENU BUTTONS
+ * ============================================ */
+.menu-buttons {
+    align-items: stretch;
+    width: 100%;
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+}
+
+/* Each menu button */
+.menu-btn {
+    height: 50px;
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-md);
+    letter-spacing: 2px;
+}
+
+
+/* ============================================
+ *  VERSION LABEL
+ * ============================================ */
+.version-label {
+    font-size: var(--font-xs);
+    color: var(--color-text-muted);
+    -unity-text-align: middle-center;
+    margin-top: var(--spacing-xl);
+    opacity: 0.6;
+}
+
+
+/* ============================================
+ *  SETTINGS PANEL
+ * ============================================ */
+.settings-panel {
+    width: 500px;
+    min-height: 550px;
+    padding: var(--spacing-xl);
+}
+
+.panel-title {
+    font-size: var(--font-2xl);
+    color: var(--color-text-bright);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    letter-spacing: 3px;
+}
+
+/* Settings section group */
+.settings-section {
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+}
+
+.section-title {
+    font-size: var(--font-sm);
+    color: var(--color-primary);
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Each setting row: label + control + value */
+.setting-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--spacing-sm) 0;
+}
+
+.setting-label {
+    font-size: var(--font-sm);
+    color: var(--color-text);
+    width: 120px;
+}
+
+.setting-slider {
+    flex-grow: 1;
+    margin-left: var(--spacing-sm);
+    margin-right: var(--spacing-sm);
+}
+
+.setting-value {
+    font-size: var(--font-sm);
+    color: var(--color-primary);
+    -unity-font-style: bold;
+    width: 45px;
+    -unity-text-align: middle-right;
+}
+
+/* Settings action buttons */
+.settings-buttons {
+    margin-top: var(--spacing-lg);
+    justify-content: center;
+    width: 100%;
+}
+
+.settings-buttons > Button {
+    margin-left: var(--spacing-sm);
+    margin-right: var(--spacing-sm);
+    width: 120px;
+    height: 40px;
+}
+
+/* Dropdown styling */
+.dropdown-styled {
+    background-color: var(--color-bg-card);
+    border-color: var(--color-border);
+    border-width: 1px;
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    min-width: 140px;
+}
+
+
+/* ============================================
+ *  ABOUT PANEL
+ * ============================================ */
+.about-panel {
+    width: 460px;
+    min-height: 420px;
+    padding: var(--spacing-xl);
+    align-items: center;
+}
+
+.about-text {
+    font-size: var(--font-lg);
+    color: var(--color-text-bright);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.about-description {
+    font-size: var(--font-sm);
+    color: var(--color-text-muted);
+    -unity-text-align: middle-center;
+    margin-bottom: var(--spacing-lg);
+    white-space: normal;
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+}
+
+.about-features {
+    width: 100%;
+    padding: var(--spacing-md);
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.feature-item {
+    font-size: var(--font-sm);
+    color: var(--color-success);
+    padding: var(--spacing-xs) 0;
+}

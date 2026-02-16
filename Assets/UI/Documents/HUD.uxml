@@ -1,0 +1,129 @@
+<!--
+    ============================================
+    HUD.uxml — In-Game Heads-Up Display
+    ============================================
+    This demonstrates a runtime game HUD with:
+    - Health bar (top-left)
+    - Score display (top-right)
+    - Ability cooldowns (bottom-center)
+    - Pause button (top-right corner)
+
+    LAYOUT CONCEPTS DEMONSTRATED:
+    - Absolute positioning for screen corners
+    - Flexbox row/column layouts
+    - Nested containers for grouping
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <Style src="../Styles/Common.uss" />
+    <Style src="../Styles/HUD.uss" />
+
+    <!-- ROOT — Full screen container, no background (transparent over game) -->
+    <ui:VisualElement name="hud-root" class="hud-root">
+
+        <!-- ========== TOP BAR ========== -->
+        <ui:VisualElement name="top-bar" class="hud-top-bar">
+
+            <!-- LEFT: Player Info -->
+            <ui:VisualElement name="player-info" class="hud-player-info">
+
+                <!-- Player Avatar Circle -->
+                <ui:VisualElement name="player-avatar" class="player-avatar">
+                    <ui:Label text="🧙" class="avatar-icon" />
+                </ui:VisualElement>
+
+                <!-- Health & Mana Bars -->
+                <ui:VisualElement class="bars-container">
+                    <!-- Player Name -->
+                    <ui:Label text="Hero" name="player-name" class="player-name" />
+
+                    <!-- Health Bar -->
+                    <ui:VisualElement class="bar-wrapper">
+                        <ui:VisualElement name="health-bar-bg" class="bar-bg health-bar-bg">
+                            <ui:VisualElement name="health-bar-fill" class="bar-fill health-bar-fill" />
+                        </ui:VisualElement>
+                        <ui:Label text="85/100" name="health-text" class="bar-text" />
+                    </ui:VisualElement>
+
+                    <!-- Mana Bar -->
+                    <ui:VisualElement class="bar-wrapper">
+                        <ui:VisualElement name="mana-bar-bg" class="bar-bg mana-bar-bg">
+                            <ui:VisualElement name="mana-bar-fill" class="bar-fill mana-bar-fill" />
+                        </ui:VisualElement>
+                        <ui:Label text="60/100" name="mana-text" class="bar-text" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- RIGHT: Score & Pause -->
+            <ui:VisualElement name="top-right" class="hud-top-right">
+                <!-- Score -->
+                <ui:VisualElement class="score-container">
+                    <ui:Label text="SCORE" class="score-label" />
+                    <ui:Label text="04,500" name="score-value" class="score-value" />
+                </ui:VisualElement>
+
+                <!-- Timer -->
+                <ui:VisualElement class="timer-container">
+                    <ui:Label text="⏱" class="timer-icon" />
+                    <ui:Label text="12:34" name="timer-value" class="timer-value" />
+                </ui:VisualElement>
+
+                <!-- Pause Button -->
+                <ui:Button text="⏸" name="btn-pause" class="btn-pause" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- ========== BOTTOM BAR ========== -->
+        <ui:VisualElement name="bottom-bar" class="hud-bottom-bar">
+
+            <!-- Ability Slots -->
+            <ui:VisualElement name="ability-bar" class="ability-bar">
+
+                <ui:VisualElement name="ability-1" class="ability-slot">
+                    <ui:Label text="⚔" class="ability-icon" />
+                    <ui:Label text="Q" class="ability-key" />
+                    <ui:VisualElement name="cooldown-1" class="cooldown-overlay" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="ability-2" class="ability-slot">
+                    <ui:Label text="🛡" class="ability-icon" />
+                    <ui:Label text="W" class="ability-key" />
+                    <ui:VisualElement name="cooldown-2" class="cooldown-overlay" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="ability-3" class="ability-slot">
+                    <ui:Label text="🔥" class="ability-icon" />
+                    <ui:Label text="E" class="ability-key" />
+                    <ui:VisualElement name="cooldown-3" class="cooldown-overlay" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="ability-4" class="ability-slot ability-ultimate">
+                    <ui:Label text="⚡" class="ability-icon" />
+                    <ui:Label text="R" class="ability-key" />
+                    <ui:VisualElement name="cooldown-4" class="cooldown-overlay" />
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- ========== NOTIFICATION AREA (top center) ========== -->
+        <ui:VisualElement name="notification-area" class="notification-area">
+            <ui:Label text="" name="notification-text" class="notification-text" />
+        </ui:VisualElement>
+
+        <!-- ========== PAUSE OVERLAY (hidden by default) ========== -->
+        <ui:VisualElement name="pause-overlay" class="pause-overlay hidden">
+            <ui:VisualElement class="pause-panel panel">
+                <ui:Label text="⏸ PAUSED" class="pause-title" />
+                <ui:VisualElement class="divider" />
+                <ui:Button text="▶ RESUME" name="btn-resume" class="btn-primary menu-btn" />
+                <ui:Button text="⚙ SETTINGS" name="btn-pause-settings" class="btn-secondary menu-btn" />
+                <ui:Button text="🏠 MAIN MENU" name="btn-main-menu" class="btn-danger menu-btn" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

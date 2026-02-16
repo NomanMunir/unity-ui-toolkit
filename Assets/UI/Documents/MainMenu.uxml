@@ -1,0 +1,152 @@
+<!--
+    ============================================
+    MainMenu.uxml — Main Menu Layout
+    ============================================
+    UXML is like HTML for Unity UI Toolkit.
+
+    KEY DIFFERENCES FROM HTML:
+    - Tags are Unity types: <ui:VisualElement>, <ui:Button>, <ui:Label>
+    - Use "name" attribute instead of "id" (for C# queries)
+    - Use "class" for USS styling (same as CSS)
+    - No <div>, use <ui:VisualElement> instead
+    - Namespace: ui = "UnityEngine.UIElements"
+
+    HIERARCHY WORKS LIKE HTML:
+    - Nested elements are children
+    - Parent layout affects children (Flexbox)
+    - Styles cascade from parent to child
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance"
+         engine="UnityEngine.UIElements"
+         editor="UnityEditor.UIElements">
+
+    <!-- Link stylesheets (like <link rel="stylesheet"> in HTML) -->
+    <Style src="../Styles/Common.uss" />
+    <Style src="../Styles/MainMenu.uss" />
+
+    <!-- ROOT CONTAINER — Full screen background -->
+    <ui:VisualElement name="root-container" class="menu-root">
+
+        <!-- ========== BACKGROUND OVERLAY ========== -->
+        <ui:VisualElement name="bg-overlay" class="menu-bg-overlay" />
+
+        <!-- ========== MAIN MENU PANEL ========== -->
+        <ui:VisualElement name="main-menu" class="menu-panel">
+
+            <!-- Game Title -->
+            <ui:VisualElement class="title-container">
+                <ui:Label text="MY GAME" name="game-title" class="game-title" />
+                <ui:Label text="A Unity UI Toolkit Demo" name="game-subtitle" class="game-subtitle" />
+            </ui:VisualElement>
+
+            <!-- Decorative divider -->
+            <ui:VisualElement class="divider menu-divider" />
+
+            <!-- Menu Buttons -->
+            <ui:VisualElement name="button-container" class="menu-buttons">
+
+                <ui:Button text="▶  PLAY" name="btn-play" class="btn-primary menu-btn" />
+                <ui:Button text="⚙  SETTINGS" name="btn-settings" class="btn-secondary menu-btn" />
+                <ui:Button text="ℹ  ABOUT" name="btn-about" class="btn-secondary menu-btn" />
+                <ui:Button text="✕  QUIT" name="btn-quit" class="btn-danger menu-btn" />
+
+            </ui:VisualElement>
+
+            <!-- Version label at bottom -->
+            <ui:Label text="v1.0.0 — UI Toolkit Demo" class="version-label" />
+
+        </ui:VisualElement>
+
+        <!-- ========== SETTINGS PANEL (hidden by default) ========== -->
+        <ui:VisualElement name="settings-panel" class="menu-panel settings-panel hidden">
+
+            <ui:Label text="⚙ SETTINGS" class="panel-title" />
+            <ui:VisualElement class="divider menu-divider" />
+
+            <!-- Audio Settings -->
+            <ui:VisualElement class="settings-section">
+                <ui:Label text="AUDIO" class="section-title" />
+
+                <ui:VisualElement class="setting-row">
+                    <ui:Label text="Master Volume" class="setting-label" />
+                    <ui:Slider name="slider-master-volume"
+                               low-value="0" high-value="100" value="80"
+                               class="slider-styled setting-slider" />
+                    <ui:Label text="80%" name="label-master-volume" class="setting-value" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="setting-row">
+                    <ui:Label text="Music Volume" class="setting-label" />
+                    <ui:Slider name="slider-music-volume"
+                               low-value="0" high-value="100" value="60"
+                               class="slider-styled setting-slider" />
+                    <ui:Label text="60%" name="label-music-volume" class="setting-value" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="setting-row">
+                    <ui:Label text="SFX Volume" class="setting-label" />
+                    <ui:Slider name="slider-sfx-volume"
+                               low-value="0" high-value="100" value="100"
+                               class="slider-styled setting-slider" />
+                    <ui:Label text="100%" name="label-sfx-volume" class="setting-value" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- Display Settings -->
+            <ui:VisualElement class="settings-section">
+                <ui:Label text="DISPLAY" class="section-title" />
+
+                <ui:VisualElement class="setting-row">
+                    <ui:Label text="Fullscreen" class="setting-label" />
+                    <ui:Toggle name="toggle-fullscreen" value="true" class="toggle-styled" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="setting-row">
+                    <ui:Label text="VSync" class="setting-label" />
+                    <ui:Toggle name="toggle-vsync" value="true" class="toggle-styled" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="setting-row">
+                    <ui:Label text="Quality" class="setting-label" />
+                    <ui:DropdownField name="dropdown-quality"
+                                      choices="Low,Medium,High,Ultra"
+                                      value="High"
+                                      class="dropdown-styled" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- Settings Buttons -->
+            <ui:VisualElement class="settings-buttons flex-row">
+                <ui:Button text="APPLY" name="btn-apply-settings" class="btn-primary" />
+                <ui:Button text="BACK" name="btn-back-settings" class="btn-secondary" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- ========== ABOUT PANEL (hidden by default) ========== -->
+        <ui:VisualElement name="about-panel" class="menu-panel about-panel hidden">
+
+            <ui:Label text="ℹ ABOUT" class="panel-title" />
+            <ui:VisualElement class="divider menu-divider" />
+
+            <ui:Label text="Unity UI Toolkit Learning Project"
+                      class="about-text" />
+            <ui:Label text="This project demonstrates the core concepts of Unity's UI Toolkit system, including UXML (structure), USS (styling), and C# (logic)."
+                      class="about-description" />
+
+            <ui:VisualElement class="about-features">
+                <ui:Label text="✓  UXML — Declarative UI structure" class="feature-item" />
+                <ui:Label text="✓  USS — CSS-like styling" class="feature-item" />
+                <ui:Label text="✓  C# — Event handling &amp; logic" class="feature-item" />
+                <ui:Label text="✓  Flexbox layout system" class="feature-item" />
+                <ui:Label text="✓  Transitions &amp; animations" class="feature-item" />
+            </ui:VisualElement>
+
+            <ui:Button text="BACK" name="btn-back-about" class="btn-secondary" />
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>
