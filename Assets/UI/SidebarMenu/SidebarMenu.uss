@@ -301,12 +301,14 @@
 }
 
 /* ── Header Toolbar (Theme + Language) ──
- *  A horizontal row of small buttons below the subtitle.
- *  Clean, simple, no overlap with title.
+ *  Positioned absolutely in the top-right corner
+ *  of the header area.
  */
 .header-toolbar {
+    position: absolute;
+    top: 16px;
+    right: 16px;
     flex-direction: row;
-    margin-top: var(--sb-gap-xs);
 }
 
 .toolbar-btn {
