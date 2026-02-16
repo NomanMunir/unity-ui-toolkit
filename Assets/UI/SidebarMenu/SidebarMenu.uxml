@@ -42,22 +42,18 @@
 
             <!-- ── Header ── -->
             <ui:VisualElement class="sidebar-header">
-                <ui:VisualElement class="header-row">
-                    <ui:Label text="🛰" class="header-logo" />
-                    <ui:Label text="Sim Assets" name="lbl-header-title" class="header-title" />
-                    <!-- Spacer pushes buttons to the right -->
-                    <ui:VisualElement class="header-spacer" />
-                    <!-- THEME TOGGLE — swaps dark/light USS variables -->
-                    <ui:Button text="🌙" name="btn-theme" class="icon-btn" />
-                    <!-- LANGUAGE DROPDOWN — cycles through languages -->
-                    <ui:Button text="EN" name="btn-lang" class="icon-btn lang-btn" />
-                </ui:VisualElement>
+                <ui:Label text="Sim Assets" name="lbl-header-title" class="header-title" />
                 <ui:Label text="Browse and configure simulation entities" name="lbl-header-subtitle" class="header-subtitle" />
+
+                <!-- Toolbar row: theme + language buttons -->
+                <ui:VisualElement class="header-toolbar">
+                    <ui:Button text="Theme" name="btn-theme" class="toolbar-btn" />
+                    <ui:Button text="EN" name="btn-lang" class="toolbar-btn lang-btn" />
+                </ui:VisualElement>
             </ui:VisualElement>
 
             <!-- ── Search Bar ── -->
             <ui:VisualElement class="search-bar">
-                <ui:Label text="🔍" class="search-icon" />
                 <ui:TextField name="sidebar-search" class="sidebar-search-field" />
             </ui:VisualElement>
 
@@ -68,9 +64,9 @@
                            class="tabs-scroll">
                 <ui:VisualElement name="category-tabs" class="sidebar-tabs">
                     <ui:Button text="All" name="stab-all" class="tab-pill tab-pill-active" />
-                    <ui:Button text="✈ Air" name="stab-air" class="tab-pill" />
-                    <ui:Button text="🛡 Land" name="stab-land" class="tab-pill" />
-                    <ui:Button text="🚢 Sea" name="stab-sea" class="tab-pill" />
+                    <ui:Button text="Air" name="stab-air" class="tab-pill" />
+                    <ui:Button text="Land" name="stab-land" class="tab-pill" />
+                    <ui:Button text="Sea" name="stab-sea" class="tab-pill" />
                 </ui:VisualElement>
             </ui:ScrollView>
 

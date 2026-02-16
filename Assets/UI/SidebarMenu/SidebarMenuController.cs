@@ -280,8 +280,8 @@ public class SidebarMenuController : MonoBehaviour
             Debug.Log($"[SidebarMenu] Theme via class toggle: {(_isDarkTheme ? "Dark" : "Light")}");
         }
 
-        // Update button icon
-        _themeBtn.text = _isDarkTheme ? "🌙" : "☀";
+        // Update button label
+        _themeBtn.text = _isDarkTheme ? "Dark" : "Light";
     }
 
 

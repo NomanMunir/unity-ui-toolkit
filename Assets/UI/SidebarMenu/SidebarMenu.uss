@@ -290,30 +290,35 @@
     color: var(--sb-text-bright);
     -unity-font-style: bold;
     letter-spacing: 1px;
+    margin-bottom: 2px;
 }
 
-/* Pushes icon buttons to the right */
-.header-spacer {
-    flex-grow: 1;
+.header-subtitle {
+    font-size: 12px;
+    color: var(--sb-text-muted);
+    letter-spacing: 0.5px;
+    margin-bottom: var(--sb-gap-sm);
 }
 
-/* ── Icon Buttons (Theme + Language) ──
- *  Small square buttons in the header.
- *  Demonstrates: border-radius: 50% for circle,
- *  transition on background and scale.
+/* ── Header Toolbar (Theme + Language) ──
+ *  A horizontal row of small buttons below the subtitle.
+ *  Clean, simple, no overlap with title.
  */
-.icon-btn {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    margin-left: 4px;
-    padding: 0;
-    font-size: 14px;
+.header-toolbar {
+    flex-direction: row;
+    margin-top: var(--sb-gap-xs);
+}
+
+.toolbar-btn {
+    height: 26px;
+    padding: 0 12px;
+    margin-right: var(--sb-gap-xs);
+    font-size: 11px;
     color: var(--sb-text-muted);
     background-color: var(--sb-bg);
     border-width: 1px;
     border-color: var(--sb-border);
-    border-radius: 50%;
+    border-radius: var(--sb-radius-pill);
     -unity-text-align: middle-center;
     cursor: link;
 
@@ -322,39 +327,27 @@
     transition-duration: var(--sb-fast);
 }
 
-.icon-btn:hover {
+.toolbar-btn:hover {
     background-color: var(--sb-accent-dim);
     border-color: var(--sb-accent);
     color: var(--sb-accent);
-    scale: 1.1;
+    scale: 1.05;
 }
 
-.icon-btn:active {
-    scale: 0.92;
+.toolbar-btn:active {
+    scale: 0.95;
 }
 
-/* Language button — slightly wider to fit text */
+/* Language button — bold label */
 .lang-btn {
-    width: 36px;
-    min-width: 36px;
-    font-size: 11px;
     -unity-font-style: bold;
-    letter-spacing: 0.5px;
-}
-
-.header-subtitle {
-    font-size: 12px;
-    color: var(--sb-text-muted);
     letter-spacing: 0.5px;
 }
 
 
 /* ============================================
  *  SEARCH BAR
- * ============================================
- *  Demonstrates: :focus pseudo-class,
- *  transition on border-color.
- */
+ * ============================================ */
 .search-bar {
     flex-direction: row;
     align-items: center;
@@ -373,12 +366,6 @@
 
 .search-bar:hover {
     border-color: rgba(0, 229, 255, 0.3);
-}
-
-.search-icon {
-    font-size: 14px;
-    margin-right: var(--sb-gap-sm);
-    color: var(--sb-text-muted);
 }
 
 .sidebar-search-field {
