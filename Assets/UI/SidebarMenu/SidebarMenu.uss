@@ -1,0 +1,631 @@
+/*
+ * ============================================
+ *  SidebarMenu.uss — Hamburger Sidebar Styles
+ * ============================================
+ *
+ *  FEATURES DEMONSTRATED:
+ *
+ *  1. CSS VARIABLES (Custom Properties)
+ *     - :root { --my-var: value; }
+ *     - var(--my-var) to reference
+ *
+ *  2. TRANSITIONS (Animations)
+ *     - transition-property: which CSS properties animate
+ *     - transition-duration: how long the animation takes
+ *     - transition-timing-function: easing curve
+ *     - Applied to: sidebar slide, backdrop fade, card hover
+ *
+ *  3. PSEUDO-CLASSES
+ *     - :hover → mouse over
+ *     - :active → mouse down
+ *     - :checked → toggle on
+ *     - :focus → keyboard focus
+ *
+ *  4. CLASS TOGGLING (state-based styling)
+ *     - .sidebar-open → added/removed via C#
+ *     - Drives all animations via USS transitions
+ *
+ *  5. FLEXBOX LAYOUT
+ *     - flex-direction: row / column
+ *     - align-items, justify-content
+ *     - flex-grow, flex-shrink, flex-wrap
+ *
+ *  6. NESTING SELECTORS
+ *     - .parent .child { } → descendant selector
+ *     - .parent > .child { } → direct child (NOT supported in USS)
+ *     - .class1.class2 { } → both classes on same element
+ */
+
+
+/* ============================================
+ *  ROOT VARIABLES
+ * ============================================ */
+:root {
+    /* Sidebar dimensions */
+    --sidebar-width: 320px;
+    --sidebar-collapsed: -320px;
+
+    /* Colors — dark theme */
+    --sb-bg:            #0f1923;
+    --sb-bg-light:      #162232;
+    --sb-bg-card:       #1a2d42;
+    --sb-bg-card-hover: #243b54;
+    --sb-accent:        #00e5ff;
+    --sb-accent-dim:    rgba(0, 229, 255, 0.15);
+    --sb-accent-glow:   rgba(0, 229, 255, 0.4);
+    --sb-text:          #c8d6e5;
+    --sb-text-bright:   #ffffff;
+    --sb-text-muted:    #6b7c93;
+    --sb-border:        rgba(0, 229, 255, 0.12);
+    --sb-danger:        #ff6b6b;
+    --sb-success:       #51cf66;
+    --sb-warning:       #fcc419;
+
+    /* Spacing */
+    --sb-gap-xs: 4px;
+    --sb-gap-sm: 8px;
+    --sb-gap-md: 14px;
+    --sb-gap-lg: 20px;
+
+    /* Radius */
+    --sb-radius: 8px;
+    --sb-radius-sm: 5px;
+    --sb-radius-pill: 20px;
+
+    /* Timing */
+    --sb-fast: 200ms;
+    --sb-normal: 350ms;
+    --sb-slow: 500ms;
+}
+
+
+/* ============================================
+ *  ROOT CONTAINER
+ * ============================================ */
+.sidebar-root {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+
+/* ============================================
+ *  BACKDROP — Semi-transparent overlay
+ * ============================================
+ *  TRANSITION: Fades in/out using opacity.
+ *  When sidebar is closed, it's invisible and
+ *  non-interactive (display:none would skip the animation).
+ */
+.backdrop {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+
+    /* ⚡ TRANSITION — opacity fades smoothly */
+    transition-property: opacity;
+    transition-duration: var(--sb-normal);
+    transition-timing-function: ease-in-out;
+}
+
+/* When sidebar is open, backdrop becomes visible */
+.sidebar-open .backdrop {
+    opacity: 1;
+}
+
+
+/* ============================================
+ *  HAMBURGER BUTTON
+ * ============================================
+ *  Three horizontal lines that animate into an X
+ *  when the sidebar opens. Pure CSS animation!
+ *
+ *  TRANSITIONS on each line:
+ *  - rotate: spins to form X
+ *  - translate: moves to center
+ *  - opacity: middle line fades out
+ *  - background-color: changes on hover
+ */
+.hamburger-btn {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 40px;
+    height: 40px;
+    padding: 9px 8px;
+    background-color: var(--sb-bg);
+    border-width: 1px;
+    border-color: var(--sb-border);
+    border-radius: var(--sb-radius);
+    justify-content: space-between;
+    cursor: link;
+    /* Ensure hamburger is above the sidebar */
+    z-index: 100;
+
+    /* ⚡ TRANSITION — background on hover */
+    transition-property: background-color, border-color, scale;
+    transition-duration: var(--sb-fast);
+}
+
+.hamburger-btn:hover {
+    background-color: var(--sb-bg-light);
+    border-color: var(--sb-accent);
+    scale: 1.08;
+}
+
+.hamburger-btn:active {
+    scale: 0.95;
+}
+
+.hamburger-line {
+    width: 100%;
+    height: 3px;
+    background-color: var(--sb-text);
+    border-radius: 2px;
+
+    /* ⚡ TRANSITION — lines animate to X shape */
+    transition-property: rotate, translate, opacity, background-color;
+    transition-duration: var(--sb-normal);
+    transition-timing-function: ease-in-out;
+}
+
+/*
+ * HAMBURGER → X ANIMATION
+ * When .sidebar-open is on the root:
+ *   Line 1: rotates +45° and moves down to center
+ *   Line 2: fades out (opacity 0)
+ *   Line 3: rotates -45° and moves up to center
+ */
+.sidebar-open .hamburger-line {
+    background-color: var(--sb-accent);
+}
+
+.sidebar-open .hamburger-line-1 {
+    rotate: 45deg;
+    translate: 0 8px;
+}
+
+.sidebar-open .hamburger-line-2 {
+    opacity: 0;
+}
+
+.sidebar-open .hamburger-line-3 {
+    rotate: -45deg;
+    translate: 0 -8px;
+}
+
+
+/* ============================================
+ *  SIDEBAR PANEL — Slides in from left
+ * ============================================
+ *  TRANSITION: translate-x slides the panel.
+ *  Starts off-screen (left: -320px) and slides to 0.
+ *
+ *  This is one of the most important UI Toolkit
+ *  animation patterns — using translate + transition
+ *  for smooth panel slides.
+ */
+.sidebar-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100%;
+    background-color: var(--sb-bg);
+    border-right-width: 1px;
+    border-color: var(--sb-border);
+
+    /* Start off-screen */
+    translate: var(--sidebar-collapsed) 0;
+
+    /* ⚡ TRANSITION — smooth slide animation */
+    transition-property: translate;
+    transition-duration: var(--sb-normal);
+    transition-timing-function: ease-out;
+}
+
+/* When open, slide to position */
+.sidebar-open .sidebar-panel {
+    translate: 0 0;
+}
+
+
+/* ============================================
+ *  HEADER
+ * ============================================ */
+.sidebar-header {
+    padding: var(--sb-gap-lg) var(--sb-gap-md);
+    padding-top: 64px; /* Space for hamburger button */
+    border-bottom-width: 1px;
+    border-color: var(--sb-border);
+    background-color: var(--sb-bg-light);
+}
+
+.header-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: var(--sb-gap-xs);
+}
+
+.header-logo {
+    font-size: 26px;
+    margin-right: var(--sb-gap-sm);
+}
+
+.header-title {
+    font-size: 22px;
+    color: var(--sb-text-bright);
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+.header-subtitle {
+    font-size: 12px;
+    color: var(--sb-text-muted);
+    letter-spacing: 0.5px;
+}
+
+
+/* ============================================
+ *  SEARCH BAR
+ * ============================================
+ *  Demonstrates: :focus pseudo-class,
+ *  transition on border-color.
+ */
+.search-bar {
+    flex-direction: row;
+    align-items: center;
+    margin: var(--sb-gap-md);
+    padding: 0 var(--sb-gap-sm);
+    background-color: var(--sb-bg-light);
+    border-width: 1px;
+    border-color: var(--sb-border);
+    border-radius: var(--sb-radius);
+    height: 38px;
+
+    /* ⚡ TRANSITION — border glows on focus */
+    transition-property: border-color, background-color;
+    transition-duration: var(--sb-fast);
+}
+
+.search-bar:hover {
+    border-color: rgba(0, 229, 255, 0.3);
+}
+
+.search-icon {
+    font-size: 14px;
+    margin-right: var(--sb-gap-sm);
+    color: var(--sb-text-muted);
+}
+
+.sidebar-search-field {
+    flex-grow: 1;
+    height: 100%;
+    font-size: 13px;
+    color: var(--sb-text);
+    background-color: transparent;
+    border-width: 0;
+}
+
+.sidebar-search-field:focus {
+    color: var(--sb-text-bright);
+}
+
+/* Override the internal input styling */
+.sidebar-search-field .unity-text-field__input {
+    background-color: transparent;
+    border-width: 0;
+    color: var(--sb-text);
+    padding: 0;
+}
+
+.sidebar-search-field .unity-text-field__input:focus {
+    color: var(--sb-text-bright);
+}
+
+
+/* ============================================
+ *  CATEGORY TABS — Horizontal pill buttons
+ * ============================================
+ *  Demonstrates: flex-direction: row,
+ *  border-radius for pill shape, class toggling.
+ */
+.tabs-scroll {
+    height: 42px;
+    min-height: 42px;
+    max-height: 42px;
+    padding: 0 var(--sb-gap-md);
+}
+
+.sidebar-tabs {
+    flex-direction: row;
+    align-items: center;
+    height: 42px;
+}
+
+.tab-pill {
+    height: 30px;
+    padding: 0 12px;
+    margin-right: var(--sb-gap-xs);
+    font-size: 12px;
+    color: var(--sb-text-muted);
+    background-color: transparent;
+    border-width: 1px;
+    border-color: var(--sb-border);
+    border-radius: var(--sb-radius-pill);
+    cursor: link;
+    white-space: nowrap;
+
+    /* ⚡ TRANSITION — background, color, border animate */
+    transition-property: background-color, border-color, color, scale;
+    transition-duration: var(--sb-fast);
+}
+
+.tab-pill:hover {
+    background-color: var(--sb-accent-dim);
+    border-color: rgba(0, 229, 255, 0.3);
+    color: var(--sb-text);
+    scale: 1.05;
+}
+
+.tab-pill:active {
+    scale: 0.95;
+}
+
+/* Active tab — class toggled by C# */
+.tab-pill-active {
+    background-color: var(--sb-accent-dim);
+    border-color: var(--sb-accent);
+    color: var(--sb-accent);
+}
+
+.tab-pill-active:hover {
+    background-color: rgba(0, 229, 255, 0.25);
+}
+
+
+/* ============================================
+ *  RESULTS BAR
+ * ============================================ */
+.results-bar {
+    padding: var(--sb-gap-xs) var(--sb-gap-md);
+}
+
+.results-label {
+    font-size: 11px;
+    color: var(--sb-text-muted);
+    letter-spacing: 0.5px;
+}
+
+
+/* ============================================
+ *  ASSET LIST
+ * ============================================ */
+.asset-list-scroll {
+    flex-grow: 1;
+}
+
+.asset-list {
+    padding: 0 var(--sb-gap-sm);
+}
+
+
+/* ============================================
+ *  ASSET CARD
+ * ============================================
+ *  Demonstrates: hover transitions on multiple
+ *  properties (background, border, scale, translate),
+ *  nested element styling, and pseudo-class chains.
+ */
+.asset-card {
+    flex-direction: row;
+    align-items: center;
+    padding: var(--sb-gap-sm) var(--sb-gap-md);
+    margin-bottom: var(--sb-gap-xs);
+    background-color: transparent;
+    border-width: 1px;
+    border-color: transparent;
+    border-radius: var(--sb-radius);
+    cursor: link;
+
+    /* ⚡ TRANSITION — multi-property animation */
+    transition-property: background-color, border-color, translate, scale;
+    transition-duration: var(--sb-fast);
+}
+
+.asset-card:hover {
+    background-color: var(--sb-bg-card);
+    border-color: var(--sb-border);
+    translate: 4px 0;   /* Subtle slide-right on hover */
+}
+
+.asset-card:active {
+    scale: 0.98;
+    background-color: var(--sb-bg-card-hover);
+}
+
+/* Selected card */
+.asset-card-selected {
+    background-color: var(--sb-accent-dim);
+    border-color: var(--sb-accent);
+    border-width: 1px;
+}
+
+.asset-card-selected:hover {
+    background-color: rgba(0, 229, 255, 0.2);
+}
+
+/* ── Card Icon ── */
+.card-icon-wrap {
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--sb-bg-light);
+    border-radius: var(--sb-radius);
+    border-width: 1px;
+    border-color: var(--sb-border);
+    margin-right: var(--sb-gap-sm);
+    flex-shrink: 0;
+
+    /* ⚡ TRANSITION — icon bg changes on card hover */
+    transition-property: background-color, border-color;
+    transition-duration: var(--sb-fast);
+}
+
+.asset-card:hover .card-icon-wrap {
+    background-color: var(--sb-accent-dim);
+    border-color: rgba(0, 229, 255, 0.3);
+}
+
+.card-icon {
+    font-size: 20px;
+    -unity-text-align: middle-center;
+}
+
+/* ── Card Text ── */
+.card-text-area {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.card-name {
+    font-size: 13px;
+    color: var(--sb-text);
+    -unity-font-style: bold;
+    margin-bottom: 1px;
+
+    /* ⚡ TRANSITION — text brightens on hover */
+    transition-property: color;
+    transition-duration: var(--sb-fast);
+}
+
+.asset-card:hover .card-name {
+    color: var(--sb-text-bright);
+}
+
+.card-desc {
+    font-size: 11px;
+    color: var(--sb-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* ── Card Category Badge ── */
+.card-badge {
+    padding: 2px 8px;
+    border-radius: var(--sb-radius-pill);
+    margin-left: var(--sb-gap-sm);
+    flex-shrink: 0;
+
+    /* ⚡ TRANSITION — badge pop on hover */
+    transition-property: scale;
+    transition-duration: var(--sb-fast);
+}
+
+.asset-card:hover .card-badge {
+    scale: 1.1;
+}
+
+.card-badge-text {
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    -unity-font-style: bold;
+}
+
+/* Badge colors per category */
+.badge-aircraft {
+    background-color: rgba(0, 229, 255, 0.15);
+}
+.badge-aircraft .card-badge-text {
+    color: #00e5ff;
+}
+
+.badge-ground {
+    background-color: rgba(255, 171, 0, 0.15);
+}
+.badge-ground .card-badge-text {
+    color: #ffab00;
+}
+
+.badge-naval {
+    background-color: rgba(41, 121, 255, 0.15);
+}
+.badge-naval .card-badge-text {
+    color: #2979ff;
+}
+
+.badge-infantry {
+    background-color: rgba(81, 207, 102, 0.15);
+}
+.badge-infantry .card-badge-text {
+    color: #51cf66;
+}
+
+.badge-structures {
+    background-color: rgba(206, 147, 216, 0.15);
+}
+.badge-structures .card-badge-text {
+    color: #ce93d8;
+}
+
+.badge-sensors {
+    background-color: rgba(255, 213, 79, 0.15);
+}
+.badge-sensors .card-badge-text {
+    color: #ffd54f;
+}
+
+
+/* ============================================
+ *  EMPTY STATE
+ * ============================================ */
+.empty-state {
+    align-items: center;
+    justify-content: center;
+    padding: var(--sb-gap-lg);
+    margin-top: var(--sb-gap-lg);
+
+    /* ⚡ TRANSITION — fade in */
+    transition-property: opacity;
+    transition-duration: var(--sb-slow);
+}
+
+.empty-state-icon {
+    font-size: 40px;
+    margin-bottom: var(--sb-gap-sm);
+    opacity: 0.4;
+}
+
+.empty-state-text {
+    font-size: 14px;
+    color: var(--sb-text-muted);
+    -unity-text-align: middle-center;
+}
+
+.empty-state-hint {
+    font-size: 11px;
+    color: var(--sb-text-muted);
+    opacity: 0.6;
+    -unity-text-align: middle-center;
+    margin-top: var(--sb-gap-xs);
+}
+
+
+/* ============================================
+ *  FOOTER
+ * ============================================ */
+.sidebar-footer {
+    padding: var(--sb-gap-sm) var(--sb-gap-md);
+    border-top-width: 1px;
+    border-color: var(--sb-border);
+    align-items: center;
+}
+
+.footer-text {
+    font-size: 10px;
+    color: var(--sb-text-muted);
+    letter-spacing: 1px;
+    opacity: 0.6;
+}

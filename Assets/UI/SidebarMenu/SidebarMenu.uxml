@@ -1,0 +1,92 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <!--
+        ============================================
+         SidebarMenu.uxml — Collapsible Hamburger Sidebar
+        ============================================
+         A standalone sidebar that slides in/out.
+         Demonstrates: transitions, class toggling,
+         dynamic element creation, search, category tabs.
+
+         CONCEPTS SHOWN:
+         1. Transition animations via USS (slide, fade, scale)
+         2. Class toggling for state changes (open/closed)
+         3. Dynamic child creation in C#
+         4. Pseudo-class styling (:hover, :active, :checked)
+         5. ScrollView for long lists
+         6. TextField for live search
+         7. Foldout for collapsible sections
+    -->
+
+    <Style src="SidebarMenu.uss" />
+
+    <!-- Full-screen overlay container -->
+    <ui:VisualElement name="sidebar-root" class="sidebar-root">
+
+        <!-- BACKDROP — Dim overlay when menu is open (click to close) -->
+        <ui:VisualElement name="backdrop" class="backdrop" />
+
+        <!-- HAMBURGER BUTTON — Always visible -->
+        <ui:VisualElement name="hamburger-btn" class="hamburger-btn">
+            <ui:VisualElement class="hamburger-line hamburger-line-1" />
+            <ui:VisualElement class="hamburger-line hamburger-line-2" />
+            <ui:VisualElement class="hamburger-line hamburger-line-3" />
+        </ui:VisualElement>
+
+        <!-- SIDEBAR PANEL — Slides in from left -->
+        <ui:VisualElement name="sidebar-panel" class="sidebar-panel">
+
+            <!-- ── Header ── -->
+            <ui:VisualElement class="sidebar-header">
+                <ui:VisualElement class="header-row">
+                    <ui:Label text="🎮" class="header-logo" />
+                    <ui:Label text="Asset Library" class="header-title" />
+                </ui:VisualElement>
+                <ui:Label text="Browse simulation assets" class="header-subtitle" />
+            </ui:VisualElement>
+
+            <!-- ── Search Bar ── -->
+            <ui:VisualElement class="search-bar">
+                <ui:Label text="🔍" class="search-icon" />
+                <ui:TextField name="sidebar-search" class="sidebar-search-field" />
+            </ui:VisualElement>
+
+            <!-- ── Category Tabs ── -->
+            <ui:ScrollView horizontal-scroller-visibility="Hidden"
+                           vertical-scroller-visibility="Hidden"
+                           mode="Horizontal"
+                           class="tabs-scroll">
+                <ui:VisualElement name="category-tabs" class="sidebar-tabs">
+                    <ui:Button text="All" name="stab-all" class="tab-pill tab-pill-active" />
+                    <ui:Button text="✈ Air" name="stab-aircraft" class="tab-pill" />
+                    <ui:Button text="🛡 Ground" name="stab-ground" class="tab-pill" />
+                    <ui:Button text="🚢 Sea" name="stab-naval" class="tab-pill" />
+                    <ui:Button text="🎖 Inf" name="stab-infantry" class="tab-pill" />
+                    <ui:Button text="🏗 Struct" name="stab-structures" class="tab-pill" />
+                    <ui:Button text="📡 Sensor" name="stab-sensors" class="tab-pill" />
+                </ui:VisualElement>
+            </ui:ScrollView>
+
+            <!-- ── Results Count ── -->
+            <ui:VisualElement class="results-bar">
+                <ui:Label text="16 assets found" name="results-count" class="results-label" />
+            </ui:VisualElement>
+
+            <!-- ── Asset List (scrollable) ── -->
+            <ui:ScrollView name="asset-list-scroll" class="asset-list-scroll">
+                <ui:VisualElement name="asset-list" class="asset-list">
+                    <!-- Asset cards are created dynamically by C# -->
+                </ui:VisualElement>
+            </ui:ScrollView>
+
+            <!-- ── Footer ── -->
+            <ui:VisualElement class="sidebar-footer">
+                <ui:Label text="UI Toolkit • Sidebar Demo" class="footer-text" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>
