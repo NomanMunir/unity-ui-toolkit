@@ -105,7 +105,7 @@ public class WorldSpaceSetup : MonoBehaviour
         groundRenderer.material.color = new Color(0.15f, 0.18f, 0.25f);
 
         // Directional light
-        if (FindAnyObjectByType<Light>() == null)
+        if (FindObjectOfType<Light>() == null)
         {
             GameObject lightObj = new GameObject("Directional Light");
             Light light = lightObj.AddComponent<Light>();
@@ -265,8 +265,8 @@ public class WorldSpaceSetup : MonoBehaviour
         _rotY = 0f;
 
         // Lock cursor for mouse-look
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = false;
     }
 
     /// <summary>
@@ -290,13 +290,13 @@ public class WorldSpaceSetup : MonoBehaviour
         // --- Escape to toggle cursor lock ---
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            bool locked = Cursor.lockState == CursorLockMode.Locked;
-            Cursor.lockState = locked ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = locked;
+            bool locked = UnityEngine.Cursor.lockState == CursorLockMode.Locked;
+            UnityEngine.Cursor.lockState = locked ? CursorLockMode.None : CursorLockMode.Locked;
+            UnityEngine.Cursor.visible = locked;
         }
 
         // --- Mouse Look ---
-        if (Cursor.lockState == CursorLockMode.Locked)
+        if (UnityEngine.Cursor.lockState == CursorLockMode.Locked)
         {
             _rotY += Input.GetAxis("Mouse X") * lookSpeed;
             _rotX -= Input.GetAxis("Mouse Y") * lookSpeed;
