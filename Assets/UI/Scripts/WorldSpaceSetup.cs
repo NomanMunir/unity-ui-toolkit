@@ -101,8 +101,7 @@ public class WorldSpaceSetup : MonoBehaviour
         ground.transform.localScale = new Vector3(5f, 1f, 5f);
 
         Renderer groundRenderer = ground.GetComponent<Renderer>();
-        groundRenderer.material = new Material(Shader.Find("Standard"));
-        groundRenderer.material.color = new Color(0.15f, 0.18f, 0.25f);
+        groundRenderer.material = CreateMaterial(new Color(0.2f, 0.22f, 0.3f));
 
         // Directional light
         if (FindObjectOfType<Light>() == null)
@@ -110,14 +109,35 @@ public class WorldSpaceSetup : MonoBehaviour
             GameObject lightObj = new GameObject("Directional Light");
             Light light = lightObj.AddComponent<Light>();
             light.type = LightType.Directional;
-            light.intensity = 1.2f;
-            light.color = new Color(1f, 0.95f, 0.9f);
+            light.intensity = 1.5f;
+            light.color = new Color(1f, 0.97f, 0.92f);
             lightObj.transform.rotation = Quaternion.Euler(50f, -30f, 0f);
         }
 
         // Skybox-ish background (set camera clear color)
         Camera.main.clearFlags = CameraClearFlags.SolidColor;
-        Camera.main.backgroundColor = new Color(0.06f, 0.08f, 0.12f);
+        Camera.main.backgroundColor = new Color(0.05f, 0.06f, 0.1f);
+    }
+
+    /// <summary>
+    /// Creates a material compatible with URP (Universal Render Pipeline).
+    ///
+    /// WHY NOT Shader.Find("Standard")?
+    /// Unity 6 uses URP by default. The old "Standard" shader doesn't
+    /// exist in URP — it renders as invisible or pink. We need to use
+    /// "Universal Render Pipeline/Lit" instead.
+    /// </summary>
+    private Material CreateMaterial(Color color)
+    {
+        // Try URP Lit shader first, fall back to Standard for built-in pipeline
+        Shader shader = Shader.Find("Universal Render Pipeline/Lit");
+        if (shader == null)
+            shader = Shader.Find("Standard");
+
+        Material mat = new Material(shader);
+        mat.SetColor("_BaseColor", color);  // URP uses _BaseColor, not _Color
+        mat.color = color;                   // Fallback for built-in pipeline
+        return mat;
     }
 
 
@@ -139,11 +159,12 @@ public class WorldSpaceSetup : MonoBehaviour
     private void SpawnNPCs()
     {
         // NPC definitions: (name, position, color)
+        // Bright, distinct colors so they stand out against the dark ground
         var npcs = new (string name, Vector3 pos, Color color)[]
         {
-            ("Knight",  new Vector3(-4f, 0.5f,  4f), new Color(0.3f, 0.5f, 0.9f)),
-            ("Archer",  new Vector3( 0f, 0.5f,  7f), new Color(0.2f, 0.8f, 0.4f)),
-            ("Mage",    new Vector3( 4f, 0.5f,  3f), new Color(0.7f, 0.3f, 0.9f)),
+            ("Knight",  new Vector3(-4f, 0.5f,  4f), new Color(0.3f, 0.55f, 1.0f)),  // Bright blue
+            ("Archer",  new Vector3( 0f, 0.5f,  7f), new Color(0.2f, 0.9f, 0.45f)),  // Vivid green
+            ("Mage",    new Vector3( 4f, 0.5f,  3f), new Color(0.85f, 0.35f, 1.0f)), // Purple
         };
 
         foreach (var (npcName, pos, color) in npcs)
@@ -170,8 +191,7 @@ public class WorldSpaceSetup : MonoBehaviour
         npc.transform.position = position;
 
         Renderer renderer = npc.GetComponent<Renderer>();
-        renderer.material = new Material(Shader.Find("Standard"));
-        renderer.material.color = color;
+        renderer.material = CreateMaterial(color);
 
         // --- 2. Create the UI anchor (child, offset above head) ---
         /*
