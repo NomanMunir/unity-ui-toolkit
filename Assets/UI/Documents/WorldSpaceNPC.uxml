@@ -1,0 +1,55 @@
+<!--
+    ============================================
+    WorldSpaceNPC.uxml — World-Space NPC UI
+    ============================================
+    This document is rendered IN THE 3D WORLD, not on screen.
+
+    WORLD SPACE vs SCREEN SPACE:
+    ─────────────────────────────────────────────
+    Screen Space: UI is a 2D overlay drawn on top of the camera
+                  → Menus, HUDs, inventory screens
+    World Space:  UI is a 3D object placed in the scene
+                  → NPC health bars, item labels, interaction prompts
+
+    KEY DIFFERENCES IN DESIGN:
+    - Keep it COMPACT — world-space UI is viewed at a distance
+    - Use fewer elements — each UIDocument has overhead
+    - Semi-transparent backgrounds help it blend with the scene
+    - Font sizes are "pixels" but the PanelSettings pixelsPerUnit
+      controls how large each pixel appears in world units
+
+    This UXML is intentionally simple — one name, one health bar,
+    one status badge. That's all you need for a floating NPC label.
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <Style src="../Styles/WorldSpace.uss" />
+
+    <!-- ROOT — Centered column, transparent background
+         In world space, this element IS the 3D panel.
+         Its dimensions are controlled by PanelSettings + pixelsPerUnit -->
+    <ui:VisualElement name="ws-root" class="ws-root">
+
+        <!-- NPC NAME -->
+        <ui:Label text="Guard" name="npc-name" class="ws-npc-name" />
+
+        <!-- HEALTH BAR
+             Structure: background track → fill bar → text overlay
+             The fill width is set via inline styles in C# -->
+        <ui:VisualElement name="health-bar-track" class="ws-health-track">
+            <ui:VisualElement name="health-bar-fill" class="ws-health-fill" />
+            <ui:Label text="100/100" name="health-text" class="ws-health-text" />
+        </ui:VisualElement>
+
+        <!-- STATUS BADGE
+             Color-coded via USS classes: status-patrol, status-alert, status-combat
+             Swapped at runtime with AddToClassList / RemoveFromClassList -->
+        <ui:VisualElement name="status-container" class="ws-status-container">
+            <ui:VisualElement name="status-dot" class="ws-status-dot status-patrol" />
+            <ui:Label text="Patrolling" name="status-label" class="ws-status-label" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

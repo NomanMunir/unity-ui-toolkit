@@ -56,23 +56,73 @@ A simulation scenario creation tool with asset browser, inspector, formation bui
 
 ---
 
+## Example 3: World Space UI — NPC Health Bars
+
+Unlike Examples 1 & 2 (screen-space overlay), this example renders UI **inside the 3D scene** — floating above NPC heads, scaling with perspective, and fading with distance.
+
+### Screen Space vs World Space
+
+| Aspect                   | Screen Space (Ex 1 & 2)     | World Space (Ex 3)                                |
+| ------------------------ | --------------------------- | ------------------------------------------------- |
+| **Rendering**            | 2D overlay on top of camera | 3D object in the scene                            |
+| **Use Case**             | Menus, HUDs, inventory      | NPC labels, interaction prompts, in-world screens |
+| **Position**             | Anchored to screen corners  | Attached to GameObjects                           |
+| **Scales with distance** | ❌ No                       | ✅ Yes                                            |
+| **PanelSettings mode**   | Screen Space (default)      | World Space                                       |
+
+### Setup
+
+1. **File → New Scene** → Save as `Assets/Scenes/WorldSpaceScene.unity`
+2. Create **PanelSettings** asset → `Right-click → Create → UI Toolkit → Panel Settings Asset`
+   - Save as `Assets/UI/WorldSpacePanelSettings`
+   - Set **Render Mode** to `World Space`
+   - Set **Pixels Per Unit** to `100` (adjust to taste)
+3. Create empty GameObject → name `WorldSpaceManager`
+4. Add `WorldSpaceSetup.cs` script
+5. In the Inspector, assign:
+   - **NPC UI Template**: `Assets/UI/Documents/WorldSpaceNPC.uxml`
+   - **World Space Panel Settings**: `Assets/UI/WorldSpacePanelSettings`
+6. Hit **Play** — 3 NPCs spawn with floating health bars
+
+### Controls
+
+- **WASD** = Move camera
+- **Mouse** = Look around
+- **Shift** = Sprint
+- **E/Q** = Up/Down
+- **Escape** = Toggle cursor lock
+
+### Key Concepts Demonstrated
+
+- **Billboard effect** — UI panels always face the camera (`WorldSpaceUIController.ApplyBillboard`)
+- **Distance fading** — UI fades out when camera is far away (`ApplyDistanceFade`)
+- **Inline styles for continuous values** — Health bar width set via `element.style.width`
+- **USS classes for discrete states** — Status badge color switched via `AddToClassList/RemoveFromClassList`
+- **Per-entity UIDocument** — Each NPC gets its own UIDocument instance
+
+> **Unity Version Note:** World Space render mode requires Unity 6+.
+> For older versions, see the "Legacy" comments in `WorldSpaceSetup.cs` for the RenderTexture workaround.
+
+---
+
 ## Folder Structure
 
 ```
 Assets/
 ├── UI/
 │   ├── Documents/
-│   │   ├── MainMenu.uxml          ← Main menu example
-│   │   ├── HUD.uxml               ← Game HUD example
-│   │   ├── ScenarioCreator.uxml   ← Scenario creator (master layout)
-│   │   └── Components/            ← Individual panel documents
+│   │   ├── MainMenu.uxml             ← Main menu example
+│   │   ├── HUD.uxml                  ← Game HUD example
+│   │   ├── ScenarioCreator.uxml      ← Scenario creator (master layout)
+│   │   ├── WorldSpaceNPC.uxml        ← World-space NPC health bar
+│   │   └── Components/               ← Individual panel documents
 │   │       ├── Toolbar.uxml
 │   │       ├── AssetBrowser.uxml
 │   │       ├── InspectorPanel.uxml
 │   │       ├── FormationBuilder.uxml
 │   │       └── SceneHierarchy.uxml
 │   ├── Styles/
-│   │   ├── Common.uss             ← Shared design tokens
+│   │   ├── Common.uss                ← Shared design tokens
 │   │   ├── MainMenu.uss
 │   │   ├── HUD.uss
 │   │   ├── ScenarioCreator.uss
@@ -80,18 +130,21 @@ Assets/
 │   │   ├── AssetBrowser.uss
 │   │   ├── InspectorPanel.uss
 │   │   ├── FormationBuilder.uss
-│   │   └── SceneHierarchy.uss
+│   │   ├── SceneHierarchy.uss
+│   │   └── WorldSpace.uss            ← World-space NPC UI styling
 │   └── Scripts/
 │       ├── MainMenuController.cs
 │       ├── HUDController.cs
-│       ├── ScenarioCreatorUI.cs   ← Master controller
+│       ├── ScenarioCreatorUI.cs       ← Master controller
 │       ├── AssetBrowserUI.cs
 │       ├── InspectorPanelUI.cs
 │       ├── FormationBuilderUI.cs
 │       ├── SceneHierarchyUI.cs
+│       ├── WorldSpaceUIController.cs  ← Per-NPC world-space logic
+│       ├── WorldSpaceSetup.cs         ← Demo scene auto-setup
 │       └── Data/
-│           ├── SimulationAsset.cs  ← Asset data model
-│           ├── Formation.cs        ← Formation data model
-│           └── AssetDatabase.cs    ← Sample data (16 assets)
-└── Scenes/                         ← Create these in Unity
+│           ├── SimulationAsset.cs     ← Asset data model
+│           ├── Formation.cs           ← Formation data model
+│           └── AssetDatabase.cs       ← Sample data (16 assets)
+└── Scenes/                            ← Create these in Unity
 ```
