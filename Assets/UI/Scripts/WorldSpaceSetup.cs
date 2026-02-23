@@ -250,6 +250,10 @@ public class WorldSpaceSetup : MonoBehaviour
 
     // ═══════════════════════════════════════════
     //  FREE-FLY CAMERA
+    //
+    //  Uses the NEW Input System (UnityEngine.InputSystem)
+    //  Unity 6+ defaults to this — the legacy Input class
+    //  throws an error if the project uses Input System Package.
     // ═══════════════════════════════════════════
 
     /// <summary>
@@ -274,6 +278,12 @@ public class WorldSpaceSetup : MonoBehaviour
     /// Walk toward NPCs to see the distance fade in action!
     ///
     /// Press Escape to unlock the cursor.
+    ///
+    /// NEW INPUT SYSTEM NOTE:
+    /// Instead of Input.GetKey(KeyCode.W), we use:
+    ///   Keyboard.current.wKey.isPressed
+    /// Instead of Input.GetAxis("Mouse X"), we use:
+    ///   Mouse.current.delta.ReadValue()
     /// </summary>
     private void Update()
     {
@@ -285,10 +295,14 @@ public class WorldSpaceSetup : MonoBehaviour
         Camera cam = Camera.main;
         if (cam == null) return;
 
+        var keyboard = UnityEngine.InputSystem.Keyboard.current;
+        var mouse = UnityEngine.InputSystem.Mouse.current;
+        if (keyboard == null || mouse == null) return;
+
         Transform camTransform = cam.transform;
 
         // --- Escape to toggle cursor lock ---
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (keyboard.escapeKey.wasPressedThisFrame)
         {
             bool locked = UnityEngine.Cursor.lockState == CursorLockMode.Locked;
             UnityEngine.Cursor.lockState = locked ? CursorLockMode.None : CursorLockMode.Locked;
@@ -298,24 +312,26 @@ public class WorldSpaceSetup : MonoBehaviour
         // --- Mouse Look ---
         if (UnityEngine.Cursor.lockState == CursorLockMode.Locked)
         {
-            _rotY += Input.GetAxis("Mouse X") * lookSpeed;
-            _rotX -= Input.GetAxis("Mouse Y") * lookSpeed;
+            Vector2 mouseDelta = mouse.delta.ReadValue();
+            _rotY += mouseDelta.x * lookSpeed * 0.1f;
+            _rotX -= mouseDelta.y * lookSpeed * 0.1f;
             _rotX = Mathf.Clamp(_rotX, -89f, 89f);
 
             camTransform.rotation = Quaternion.Euler(_rotX, _rotY, 0f);
         }
 
         // --- Movement (WASD) ---
-        float speed = moveSpeed * (Input.GetKey(KeyCode.LeftShift) ? sprintMultiplier : 1f);
+        float speed = moveSpeed * (keyboard.leftShiftKey.isPressed ? sprintMultiplier : 1f);
         Vector3 move = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.W)) move += camTransform.forward;
-        if (Input.GetKey(KeyCode.S)) move -= camTransform.forward;
-        if (Input.GetKey(KeyCode.A)) move -= camTransform.right;
-        if (Input.GetKey(KeyCode.D)) move += camTransform.right;
-        if (Input.GetKey(KeyCode.E)) move += Vector3.up;
-        if (Input.GetKey(KeyCode.Q)) move -= Vector3.up;
+        if (keyboard.wKey.isPressed) move += camTransform.forward;
+        if (keyboard.sKey.isPressed) move -= camTransform.forward;
+        if (keyboard.aKey.isPressed) move -= camTransform.right;
+        if (keyboard.dKey.isPressed) move += camTransform.right;
+        if (keyboard.eKey.isPressed) move += Vector3.up;
+        if (keyboard.qKey.isPressed) move -= Vector3.up;
 
         camTransform.position += move.normalized * speed * Time.deltaTime;
     }
 }
+
