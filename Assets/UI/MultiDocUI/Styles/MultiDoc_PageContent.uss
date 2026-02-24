@@ -119,7 +119,7 @@
     padding: var(--spacing-xs) var(--spacing-md);
     font-size: var(--font-sm);
     -unity-text-align: middle-center;
-    cursor: link;
+
     align-self: stretch;
 
     transition-property: background-color, border-color, color;
