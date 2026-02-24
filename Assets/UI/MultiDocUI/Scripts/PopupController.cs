@@ -18,19 +18,14 @@
  *  Higher sortingOrder = renders ON TOP of lower ones.
  *  The main page has the default sortingOrder = 0.
  *
- *  SHOW/HIDE STRATEGIES:
+ *  SHOW/HIDE STRATEGY:
  *  ─────────────────────────────────────────
- *  Option A: gameObject.SetActive(true/false)
- *    - Completely removes/adds the UIDocument
- *    - Triggers OnEnable/OnDisable
- *    - Best for heavy overlays
+ *  We use rootVisualElement.style.display = DisplayStyle.None/Flex.
+ *  This keeps the UIDocument alive but invisible — no lifecycle calls,
+ *  faster toggle, and avoids duplicate event registration.
  *
- *  Option B: rootVisualElement.style.display = DisplayStyle.None/Flex
- *    - Keeps the UIDocument alive but invisible
- *    - No lifecycle calls, faster toggle
- *    - Best for frequently toggled popups
- *
- *  We use Option A here for clarity.
+ *  The GameObject stays ACTIVE at all times. Only the visual tree
+ *  is hidden/shown. Events are registered ONCE in OnEnable.
  */
 
 using System;
@@ -59,6 +54,7 @@ public class PopupController : MonoBehaviour
     //  STATE
     // ─────────────────────────────────────────
     private VisualElement _root;
+    private bool _eventsRegistered;
 
 
     // ─────────────────────────────────────────
@@ -71,7 +67,21 @@ public class PopupController : MonoBehaviour
         var uiDoc = GetComponent<UIDocument>();
         _root = uiDoc.rootVisualElement;
 
-        RegisterEvents();
+        if (_root == null)
+        {
+            Debug.LogWarning("[PopupController] rootVisualElement is null — UIDocument may not have a Source Asset assigned.");
+            return;
+        }
+
+        // Register events ONCE only
+        if (!_eventsRegistered)
+        {
+            RegisterEvents();
+            _eventsRegistered = true;
+        }
+
+        // Start hidden — the popup is invisible until Show() is called
+        _root.style.display = DisplayStyle.None;
 
         Debug.Log($"[PopupController] Enabled. sortingOrder = {uiDoc.sortingOrder}");
     }
@@ -131,35 +141,36 @@ public class PopupController : MonoBehaviour
     // ─────────────────────────────────────────
 
     /// <summary>
-    /// Shows the popup by activating this GameObject.
-    /// The UIDocument becomes part of the render stack.
+    /// Shows the popup by setting display to Flex.
+    /// The UIDocument stays active — only the visual tree becomes visible.
     /// </summary>
     public void Show()
     {
-        gameObject.SetActive(true);
-        Debug.Log("[PopupController] Popup shown (layer activated).");
+        if (_root == null) return;
+        _root.style.display = DisplayStyle.Flex;
+        Debug.Log("[PopupController] Popup shown.");
     }
 
     /// <summary>
-    /// Hides the popup by deactivating this GameObject.
-    /// The UIDocument is completely removed from the render stack.
+    /// Hides the popup by setting display to None.
+    /// The UIDocument stays active — only the visual tree becomes invisible.
     /// </summary>
     public void Hide()
     {
-        gameObject.SetActive(false);
-        Debug.Log("[PopupController] Popup hidden (layer deactivated).");
+        if (_root == null) return;
+        _root.style.display = DisplayStyle.None;
+        Debug.Log("[PopupController] Popup hidden.");
     }
 
     /// <summary>
-    /// Updates the dialog content dynamically before showing.
+    /// Updates the dialog content dynamically and shows the popup.
     /// Demonstrates modifying template instance content at runtime.
     /// </summary>
     public void ShowWithMessage(string title, string message, string icon = "⚠")
     {
-        // Activate first so OnEnable runs and _root is set
-        gameObject.SetActive(true);
+        if (_root == null) return;
 
-        // Now update content
+        // Update content
         var titleLabel = _root.Q<Label>("popup-title");
         var messageLabel = _root.Q<Label>("popup-message");
         var iconLabel = _root.Q<Label>("popup-icon");
@@ -168,6 +179,8 @@ public class PopupController : MonoBehaviour
         if (messageLabel != null) messageLabel.text = message;
         if (iconLabel != null) iconLabel.text = icon;
 
+        // Show
+        _root.style.display = DisplayStyle.Flex;
         Debug.Log($"[PopupController] Popup shown with: {title}");
     }
 }
