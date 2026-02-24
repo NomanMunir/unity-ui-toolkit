@@ -1,0 +1,134 @@
+/*
+ * ============================================
+ *  MultiDoc_Popup.uss — Popup Overlay Styles
+ * ============================================
+ *  This styles the popup that lives on a SEPARATE
+ *  UIDocument with sortingOrder = 100.
+ *
+ *  CONCEPTS DEMONSTRATED:
+ *  - Full-screen semi-transparent backdrop
+ *  - Centered dialog panel
+ *  - Transitions for show/hide animation
+ *  - The .hidden utility class (display: none)
+ *
+ *  MULTI-DOCUMENT NOTE:
+ *  Because this is on its own UIDocument, it renders
+ *  ABOVE the main page. sortingOrder controls the stacking.
+ *  Both documents share the same PanelSettings asset.
+ */
+
+/* ── Backdrop — Full screen dimming overlay ── */
+.popup-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
+
+    transition-property: opacity;
+    transition-duration: var(--transition-normal);
+}
+
+/* ── Dialog Panel ── */
+.popup-dialog {
+    background-color: var(--color-bg-panel);
+    border-width: 1px;
+    border-color: var(--color-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    width: 400px;
+    align-items: center;
+
+    transition-property: scale, opacity;
+    transition-duration: var(--transition-normal);
+}
+
+/* Dialog icon */
+.popup-icon {
+    font-size: 48px;
+    margin-bottom: var(--spacing-md);
+    -unity-text-align: middle-center;
+}
+
+/* Dialog title */
+.popup-title {
+    font-size: var(--font-xl);
+    color: var(--color-text-bright);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Dialog message */
+.popup-message {
+    font-size: var(--font-sm);
+    color: var(--color-text-muted);
+    -unity-text-align: middle-center;
+    margin-bottom: var(--spacing-lg);
+    white-space: normal;
+    max-width: 320px;
+}
+
+/* Button row */
+.popup-buttons {
+    flex-direction: row;
+    justify-content: center;
+    align-self: stretch;
+}
+
+.popup-btn {
+    flex-grow: 1;
+    margin-left: var(--spacing-xs);
+    margin-right: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-sm);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    border-radius: var(--radius-md);
+    cursor: link;
+
+    transition-property: background-color, scale;
+    transition-duration: var(--transition-fast);
+}
+
+/* Confirm button */
+.popup-btn-confirm {
+    background-color: var(--color-primary-dark);
+    color: var(--color-text-bright);
+    border-width: 2px;
+    border-color: var(--color-primary);
+}
+
+.popup-btn-confirm:hover {
+    background-color: var(--color-primary);
+    scale: 1.04;
+}
+
+.popup-btn-confirm:active {
+    scale: 0.96;
+}
+
+/* Cancel button */
+.popup-btn-cancel {
+    background-color: transparent;
+    color: var(--color-text);
+    border-width: 1px;
+    border-color: var(--color-border);
+}
+
+.popup-btn-cancel:hover {
+    background-color: var(--color-bg-hover);
+    scale: 1.04;
+}
+
+.popup-btn-cancel:active {
+    scale: 0.96;
+}
+
+/* ── Hidden state ── */
+.hidden {
+    display: none;
+}

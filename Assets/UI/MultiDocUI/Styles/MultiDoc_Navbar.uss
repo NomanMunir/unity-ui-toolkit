@@ -1,0 +1,111 @@
+/*
+ * ============================================
+ *  MultiDoc_Navbar.uss — Navigation Bar Styles
+ * ============================================
+ *  Horizontal top navigation bar with:
+ *  - Logo/brand on the left
+ *  - Navigation links in the center
+ *  - Action button on the right
+ *
+ *  CONCEPTS DEMONSTRATED:
+ *  - flex-direction: row for horizontal layout
+ *  - justify-content: space-between for left/center/right
+ *  - Pseudo-class :hover for interactive feedback
+ *  - Custom active state via .nav-link-active class
+ */
+
+/* ── Navbar Container ── */
+.navbar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: rgba(10, 14, 30, 0.98);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--color-border);
+    min-height: 56px;
+}
+
+/* ── Logo / Brand ── */
+.navbar-brand {
+    flex-direction: row;
+    align-items: center;
+}
+
+.navbar-logo {
+    font-size: var(--font-xl);
+    margin-right: var(--spacing-sm);
+}
+
+.navbar-title {
+    font-size: var(--font-lg);
+    color: var(--color-primary);
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+}
+
+/* ── Navigation Links ── */
+.navbar-links {
+    flex-direction: row;
+    align-items: center;
+}
+
+.nav-link {
+    background-color: transparent;
+    color: var(--color-text-muted);
+    border-width: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: transparent;
+    border-radius: 0;
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin-left: var(--spacing-xs);
+    margin-right: var(--spacing-xs);
+    font-size: var(--font-sm);
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+    cursor: link;
+
+    transition-property: color, border-bottom-color, background-color;
+    transition-duration: var(--transition-fast);
+}
+
+.nav-link:hover {
+    color: var(--color-text-bright);
+    border-bottom-color: var(--color-primary);
+    background-color: rgba(79, 195, 247, 0.05);
+}
+
+/* Active nav link — toggled via C# AddToClassList/RemoveFromClassList */
+.nav-link-active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+}
+
+/* ── Actions (right side) ── */
+.navbar-actions {
+    flex-direction: row;
+    align-items: center;
+}
+
+.navbar-action-btn {
+    background-color: var(--color-accent);
+    color: var(--color-text-bright);
+    border-width: 0;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-sm);
+    -unity-font-style: bold;
+    cursor: link;
+
+    transition-property: background-color, scale;
+    transition-duration: var(--transition-fast);
+}
+
+.navbar-action-btn:hover {
+    background-color: var(--color-accent-hover);
+    scale: 1.05;
+}
+
+.navbar-action-btn:active {
+    scale: 0.96;
+}

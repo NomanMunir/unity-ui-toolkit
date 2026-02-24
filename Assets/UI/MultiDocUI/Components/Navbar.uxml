@@ -1,0 +1,48 @@
+<!--
+    ============================================
+    Navbar.uxml — Reusable Navigation Bar Component
+    ============================================
+    A horizontal top navigation bar.
+
+    COMPONENT PATTERN:
+    This UXML is designed to be EMBEDDED into pages using
+    <ui:Template> + <ui:Instance>, NOT loaded standalone.
+
+    The parent page declares:
+        <ui:Template name="Navbar" src="../Components/Navbar.uxml" />
+    Then places it:
+        <ui:Instance template="Navbar" />
+
+    All elements inside are still queryable from C# using
+    Q<T>("name") — template boundaries are transparent to queries.
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <!-- Component-specific styles -->
+    <Style src="../Styles/MultiDoc_Navbar.uss" />
+
+    <!-- NAVBAR ROOT -->
+    <ui:VisualElement name="navbar" class="navbar">
+
+        <!-- Left — Brand / Logo -->
+        <ui:VisualElement class="navbar-brand">
+            <ui:Label text="⬡" class="navbar-logo" />
+            <ui:Label text="MULTI-DOC" class="navbar-title" />
+        </ui:VisualElement>
+
+        <!-- Center — Navigation Links -->
+        <ui:VisualElement class="navbar-links">
+            <ui:Button text="HOME" name="nav-home" class="nav-link nav-link-active" />
+            <ui:Button text="TEAM" name="nav-team" class="nav-link" />
+            <ui:Button text="ABOUT" name="nav-about" class="nav-link" />
+        </ui:VisualElement>
+
+        <!-- Right — Action Button -->
+        <ui:VisualElement class="navbar-actions">
+            <ui:Button text="🔔 Show Popup" name="btn-show-popup" class="navbar-action-btn" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

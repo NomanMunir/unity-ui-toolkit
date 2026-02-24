@@ -1,0 +1,60 @@
+/*
+ * ============================================
+ *  MultiDoc_Footer.uss — Footer Bar Styles
+ * ============================================
+ *  A simple footer pinned to the bottom of the page.
+ *
+ *  CONCEPTS DEMONSTRATED:
+ *  - Border-top for visual separation
+ *  - Horizontal layout with space-between
+ */
+
+.footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: rgba(10, 14, 30, 0.98);
+    border-top-width: 1px;
+    border-top-color: var(--color-border);
+    min-height: 44px;
+}
+
+.footer-left {
+    flex-direction: row;
+    align-items: center;
+}
+
+.footer-right {
+    flex-direction: row;
+    align-items: center;
+}
+
+.footer-text {
+    font-size: var(--font-xs);
+    color: var(--color-text-muted);
+}
+
+.footer-link {
+    background-color: transparent;
+    color: var(--color-primary);
+    border-width: 0;
+    padding: 0 var(--spacing-sm);
+    font-size: var(--font-xs);
+    cursor: link;
+
+    transition-property: color;
+    transition-duration: var(--transition-fast);
+}
+
+.footer-link:hover {
+    color: var(--color-primary-hover);
+}
+
+.footer-separator {
+    width: 1px;
+    height: 12px;
+    background-color: var(--color-border);
+    margin-left: var(--spacing-xs);
+    margin-right: var(--spacing-xs);
+}

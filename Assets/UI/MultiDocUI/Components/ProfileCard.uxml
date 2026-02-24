@@ -1,0 +1,52 @@
+<!--
+    ============================================
+    ProfileCard.uxml — Reusable Card Component
+    ============================================
+    A card showing a team member's avatar, name, role, and a details button.
+
+    MULTIPLE INSTANCES:
+    This component is instanced MULTIPLE TIMES on the same page:
+        <ui:Instance template="ProfileCard" name="card-1" />
+        <ui:Instance template="ProfileCard" name="card-2" />
+        <ui:Instance template="ProfileCard" name="card-3" />
+
+    Each instance creates a SEPARATE copy in the visual tree.
+    In C#, you query a specific instance by its name:
+        var card1Root = _root.Q<TemplateContainer>("card-1");
+        var nameLabel = card1Root.Q<Label>("profile-name");
+
+    TemplateContainer:
+    When a <ui:Instance> is placed, Unity wraps the component's
+    content inside a TemplateContainer element. This is the "box"
+    that holds all the component's children.
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <Style src="../Styles/MultiDoc_PageContent.uss" />
+
+    <!-- CARD ROOT -->
+    <ui:VisualElement name="profile-card" class="profile-card">
+
+        <!-- Avatar Circle -->
+        <ui:VisualElement class="profile-avatar">
+            <ui:Label text="👤" name="profile-avatar-icon" class="profile-avatar-icon" />
+        </ui:VisualElement>
+
+        <!-- Name -->
+        <ui:Label text="Name" name="profile-name" class="profile-name" />
+
+        <!-- Role Badge -->
+        <ui:VisualElement class="profile-badge">
+            <ui:Label text="ROLE" name="profile-badge-text" class="profile-badge-text" />
+        </ui:VisualElement>
+
+        <!-- Role Description -->
+        <ui:Label text="Role description here" name="profile-role" class="profile-role" />
+
+        <!-- Action Button -->
+        <ui:Button text="View Details" name="profile-details-btn" class="profile-details-btn" />
+
+    </ui:VisualElement>
+
+</ui:UXML>

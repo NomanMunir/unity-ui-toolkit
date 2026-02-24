@@ -1,0 +1,167 @@
+/*
+ * ============================================
+ *  MultiDoc_PageContent.uss — Page Content Styles
+ * ============================================
+ *  Profile card grid and hero section styling.
+ *
+ *  CONCEPTS DEMONSTRATED:
+ *  - Card hover effects with transitions
+ *  - Nested element styling (avatar, badge, etc.)
+ *  - flex-wrap for responsive-like grid layout
+ */
+
+
+/* ── Hero Section (top of page) ── */
+.hero-section {
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    margin-bottom: var(--spacing-lg);
+}
+
+.hero-title {
+    font-size: var(--font-2xl);
+    color: var(--color-text-bright);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    letter-spacing: 2px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.hero-subtitle {
+    font-size: var(--font-md);
+    color: var(--color-text-muted);
+    -unity-text-align: middle-center;
+    max-width: 600px;
+}
+
+
+/* ── Profile Card ── */
+.profile-card {
+    background-color: var(--color-bg-card);
+    border-width: 1px;
+    border-color: var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-sm);
+    width: 240px;
+    align-items: center;
+
+    transition-property: background-color, border-color, scale, translate;
+    transition-duration: var(--transition-normal);
+}
+
+.profile-card:hover {
+    background-color: var(--color-bg-hover);
+    border-color: var(--color-primary);
+    scale: 1.04;
+    translate: 0 -4px;
+}
+
+/* Avatar circle */
+.profile-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-full);
+    background-color: rgba(79, 195, 247, 0.15);
+    border-width: 2px;
+    border-color: var(--color-primary);
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.profile-avatar-icon {
+    font-size: 32px;
+    -unity-text-align: middle-center;
+}
+
+/* Name & Role */
+.profile-name {
+    font-size: var(--font-lg);
+    color: var(--color-text-bright);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    margin-bottom: var(--spacing-xs);
+}
+
+.profile-role {
+    font-size: var(--font-sm);
+    color: var(--color-text-muted);
+    -unity-text-align: middle-center;
+    margin-bottom: var(--spacing-md);
+}
+
+/* Role badge */
+.profile-badge {
+    background-color: rgba(124, 77, 255, 0.2);
+    border-width: 1px;
+    border-color: var(--color-accent);
+    border-radius: var(--radius-sm);
+    padding: 2px var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.profile-badge-text {
+    font-size: var(--font-xs);
+    color: var(--color-accent-hover);
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+/* Details button (inside card) */
+.profile-details-btn {
+    background-color: transparent;
+    color: var(--color-primary);
+    border-width: 1px;
+    border-color: var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: var(--font-sm);
+    -unity-text-align: middle-center;
+    cursor: link;
+    align-self: stretch;
+
+    transition-property: background-color, border-color, color;
+    transition-duration: var(--transition-fast);
+}
+
+.profile-details-btn:hover {
+    background-color: rgba(79, 195, 247, 0.1);
+    border-color: var(--color-primary);
+    color: var(--color-text-bright);
+}
+
+
+/* ── Status Bar (below hero) ── */
+.status-bar {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.status-item {
+    flex-direction: row;
+    align-items: center;
+    margin-left: var(--spacing-lg);
+    margin-right: var(--spacing-lg);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-success);
+    margin-right: var(--spacing-sm);
+}
+
+.status-dot-warning {
+    background-color: var(--color-warning);
+}
+
+.status-text {
+    font-size: var(--font-sm);
+    color: var(--color-text-muted);
+}

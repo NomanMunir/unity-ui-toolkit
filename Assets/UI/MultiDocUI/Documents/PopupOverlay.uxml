@@ -1,0 +1,57 @@
+<!--
+    ============================================
+    PopupOverlay.uxml — Separate UIDocument Layer
+    ============================================
+    DEMONSTRATES: MULTIPLE UIDocument LAYERS
+
+    This document lives on a DIFFERENT GameObject than the
+    main page. It has its own UIDocument component with
+    sortingOrder = 100, so it renders ABOVE the main page.
+
+    WHY A SEPARATE UIDocument?
+    ─────────────────────────────────────────
+    - Popups/modals need to overlay ALL other UI
+    - sortingOrder guarantees layer stacking
+    - Can be shown/hidden independently (SetActive or display:none)
+    - Can have different PanelSettings if needed (e.g., different scale)
+    - Decoupled lifecycle — popup logic is independent of page logic
+
+    COMMUNICATION BETWEEN DOCUMENTS:
+    ─────────────────────────────────────────
+    Since this is on a different GameObject, the main page
+    can't directly Q<T>() into this document's tree.
+    Instead, use one of these patterns:
+    1. Inspector reference: [SerializeField] PopupController _popup;
+    2. Events: popup.OnConfirm += () => { ... };
+    3. FindObjectOfType<PopupController>() (avoid if possible)
+
+    SETUP IN UNITY:
+    ─────────────────────────────────────────
+    1. Create a GameObject named "PopupOverlay"
+    2. Add a UIDocument component
+    3. Assign this file (PopupOverlay.uxml) as the Source Asset
+    4. Set sortingOrder = 100 (higher = renders on top)
+    5. Assign the SAME PanelSettings as the main page
+    6. Add PopupController.cs script
+    7. Start with the GameObject DISABLED (SetActive = false)
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <!-- Styles for this layer -->
+    <Style src="../Styles/MultiDoc_Common.uss" />
+    <Style src="../Styles/MultiDoc_Popup.uss" />
+
+    <!-- Import the dialog component -->
+    <ui:Template name="ConfirmDialog" src="../Components/ConfirmDialog.uxml" />
+
+    <!-- ═══ FULL-SCREEN BACKDROP ═══ -->
+    <!-- This covers the entire screen with a semi-transparent overlay -->
+    <ui:VisualElement name="popup-backdrop" class="popup-backdrop">
+
+        <!-- The dialog component, centered by the backdrop's flex layout -->
+        <ui:Instance template="ConfirmDialog" name="dialog-instance" />
+
+    </ui:VisualElement>
+
+</ui:UXML>

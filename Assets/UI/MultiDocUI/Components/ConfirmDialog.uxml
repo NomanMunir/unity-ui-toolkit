@@ -1,0 +1,38 @@
+<!--
+    ============================================
+    ConfirmDialog.uxml — Reusable Dialog Component
+    ============================================
+    A centered dialog box with icon, title, message,
+    and Confirm/Cancel buttons.
+
+    Used inside PopupOverlay.uxml via <ui:Instance>.
+    The popup lives on a SEPARATE UIDocument with
+    sortingOrder = 100, making it render above the main page.
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <Style src="../Styles/MultiDoc_Popup.uss" />
+
+    <!-- DIALOG BOX -->
+    <ui:VisualElement name="confirm-dialog" class="popup-dialog">
+
+        <!-- Icon -->
+        <ui:Label text="⚠" name="popup-icon" class="popup-icon" />
+
+        <!-- Title -->
+        <ui:Label text="Confirm Action" name="popup-title" class="popup-title" />
+
+        <!-- Message -->
+        <ui:Label text="Are you sure you want to proceed? This action demonstrates the multi-document popup layer."
+                  name="popup-message" class="popup-message" />
+
+        <!-- Buttons -->
+        <ui:VisualElement class="popup-buttons">
+            <ui:Button text="Cancel" name="btn-popup-cancel" class="popup-btn popup-btn-cancel" />
+            <ui:Button text="Confirm" name="btn-popup-confirm" class="popup-btn popup-btn-confirm" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

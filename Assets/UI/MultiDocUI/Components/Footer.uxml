@@ -1,0 +1,31 @@
+<!--
+    ============================================
+    Footer.uxml — Reusable Footer Component
+    ============================================
+    A simple footer bar with copyright and links.
+    Designed to be embedded via <ui:Instance template="Footer" />.
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <Style src="../Styles/MultiDoc_Footer.uss" />
+
+    <ui:VisualElement name="footer" class="footer">
+
+        <!-- Left — Copyright -->
+        <ui:VisualElement class="footer-left">
+            <ui:Label text="© 2026 Multi-Doc Demo" class="footer-text" />
+        </ui:VisualElement>
+
+        <!-- Right — Links -->
+        <ui:VisualElement class="footer-right">
+            <ui:Button text="Documentation" name="footer-docs" class="footer-link" />
+            <ui:VisualElement class="footer-separator" />
+            <ui:Button text="GitHub" name="footer-github" class="footer-link" />
+            <ui:VisualElement class="footer-separator" />
+            <ui:Label text="UI Toolkit v1.0" class="footer-text" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

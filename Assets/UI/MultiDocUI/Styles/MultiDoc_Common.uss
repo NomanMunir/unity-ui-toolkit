@@ -1,0 +1,58 @@
+/*
+ * ============================================
+ *  MultiDoc_Common.uss — Shared Page Layout
+ * ============================================
+ *  Imports the project-wide Common.uss and adds
+ *  page-level layout tokens for the Multi-Document example.
+ *
+ *  IMPORT SYNTAX:
+ *  @import url("relative/path.uss");
+ *  This pulls in all rules from the referenced file,
+ *  just like @import in CSS.
+ */
+
+@import url("../../Styles/Common.uss");
+
+
+/* ============================================
+ *  PAGE LAYOUT
+ * ============================================
+ *  The page uses a vertical flex layout:
+ *  ┌───────── Navbar ─────────┐
+ *  ├──────────────────────────┤
+ *  │                          │
+ *  │       Page Content       │
+ *  │       (flex-grow: 1)     │
+ *  │                          │
+ *  ├──────────────────────────┤
+ *  └───────── Footer ─────────┘
+ */
+
+.page-root {
+    flex-grow: 1;
+    flex-direction: column;
+    background-color: var(--color-bg-dark);
+}
+
+/* Main content area — fills remaining space between navbar & footer */
+.page-body {
+    flex-grow: 1;
+    flex-direction: column;
+    padding: var(--spacing-xl);
+}
+
+/* Page section title */
+.page-section-title {
+    font-size: var(--font-xl);
+    color: var(--color-text-bright);
+    -unity-font-style: bold;
+    margin-bottom: var(--spacing-lg);
+    letter-spacing: 1px;
+}
+
+/* Grid-like row of cards (horizontal wrap) */
+.card-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}

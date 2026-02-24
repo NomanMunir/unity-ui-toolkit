@@ -1,0 +1,117 @@
+<!--
+    ============================================
+    HomePage.uxml — Main Page Document
+    ============================================
+    DEMONSTRATES: <ui:Template> + <ui:Instance> COMPOSITION
+
+    This page COMPOSES reusable components instead of
+    writing all the markup inline. Each component lives
+    in its own .uxml file under Components/.
+
+    HOW IT WORKS:
+    1. <ui:Template name="X" src="..."> — DECLARES a component (like an import)
+    2. <ui:Instance template="X" />     — PLACES the component in the tree
+
+    The result is identical to copy-pasting the component's
+    markup here, but with these benefits:
+    - Components are reusable across pages
+    - Changes to a component update ALL pages using it
+    - Smaller, more readable page files
+    - Easier team collaboration (fewer merge conflicts)
+
+    MULTIPLE INSTANCES:
+    Notice that ProfileCard is instanced THREE times.
+    Each instance gets a unique "name" so C# can target
+    a specific card via _root.Q<TemplateContainer>("card-1").
+
+    QUERYING ACROSS TEMPLATES:
+    Q<T>("element-name") searches ALL descendants, INCLUDING
+    elements inside template instances. Template boundaries
+    are transparent — you query as if it were one flat tree.
+    BUT if the same element name exists in multiple instances
+    (e.g., "profile-name" in each card), you must first query
+    the TemplateContainer to scope your search.
+
+    SETUP IN UNITY:
+    ─────────────────────────────────────────
+    1. Create a GameObject named "HomePage"
+    2. Add a UIDocument component
+    3. Assign this file (HomePage.uxml) as the Source Asset
+    4. Assign your shared PanelSettings
+    5. Add the MultiDocManager.cs script
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <!-- ═══ IMPORT STYLES ═══ -->
+    <!-- Common.uss is imported via MultiDoc_Common.uss (@import) -->
+    <Style src="../Styles/MultiDoc_Common.uss" />
+    <Style src="../Styles/MultiDoc_PageContent.uss" />
+
+    <!-- ═══ DECLARE COMPONENT TEMPLATES ═══
+         Think of these as "imports" — they don't render anything yet.
+         The "src" path is relative to THIS file's location.
+    -->
+    <ui:Template name="Navbar"      src="../Components/Navbar.uxml" />
+    <ui:Template name="Footer"      src="../Components/Footer.uxml" />
+    <ui:Template name="ProfileCard" src="../Components/ProfileCard.uxml" />
+
+
+    <!-- ═══ PAGE LAYOUT ═══ -->
+    <ui:VisualElement name="page-root" class="page-root">
+
+        <!-- ────── NAVBAR (from component) ────── -->
+        <!-- This single line replaces ~45 lines of inline navbar markup -->
+        <ui:Instance template="Navbar" name="navbar-instance" />
+
+
+        <!-- ────── PAGE BODY ────── -->
+        <ui:VisualElement name="page-body" class="page-body">
+
+            <!-- Hero Section -->
+            <ui:VisualElement class="hero-section">
+                <ui:Label text="MULTI-DOCUMENT UI" class="hero-title" />
+                <ui:Label text="This page demonstrates UXML component composition via Template/Instance and multiple UIDocument layers for popups."
+                          class="hero-subtitle" />
+            </ui:VisualElement>
+
+            <!-- Status Bar -->
+            <ui:VisualElement class="status-bar">
+                <ui:VisualElement class="status-item">
+                    <ui:VisualElement class="status-dot" />
+                    <ui:Label text="Main UIDocument — Layer 0" class="status-text" />
+                </ui:VisualElement>
+                <ui:VisualElement class="status-item">
+                    <ui:VisualElement class="status-dot status-dot-warning" />
+                    <ui:Label text="Popup UIDocument — Layer 100" class="status-text" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement class="divider" />
+
+            <!-- Section Title -->
+            <ui:Label text="👥 TEAM MEMBERS" class="page-section-title" />
+
+            <!-- ────── PROFILE CARDS (3 instances of the same component) ────── -->
+            <!--
+                Each <ui:Instance> creates a SEPARATE copy of ProfileCard.uxml.
+                The "name" attribute lets C# find each specific instance:
+                    var card1 = _root.Q<TemplateContainer>("card-1");
+                    var card1Name = card1.Q<Label>("profile-name");
+                    card1Name.text = "Alice";
+            -->
+            <ui:VisualElement class="card-grid">
+                <ui:Instance template="ProfileCard" name="card-1" />
+                <ui:Instance template="ProfileCard" name="card-2" />
+                <ui:Instance template="ProfileCard" name="card-3" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+
+        <!-- ────── FOOTER (from component) ────── -->
+        <ui:Instance template="Footer" name="footer-instance" />
+
+    </ui:VisualElement>
+
+</ui:UXML>
