@@ -65,8 +65,8 @@
         <ui:Instance template="Navbar" name="navbar-instance" />
 
 
-        <!-- ────── PAGE BODY ────── -->
-        <ui:VisualElement name="page-body" class="page-body">
+        <!-- ────── PAGE BODY (ScrollView for overflow) ────── -->
+        <ui:ScrollView name="page-body" class="page-body">
 
             <!-- Hero Section -->
             <ui:VisualElement class="hero-section">
@@ -106,7 +106,7 @@
                 <ui:Instance template="ProfileCard" name="card-3" />
             </ui:VisualElement>
 
-        </ui:VisualElement>
+        </ui:ScrollView>
 
 
         <!-- ────── FOOTER (from component) ────── -->

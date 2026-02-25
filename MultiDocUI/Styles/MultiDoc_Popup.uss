@@ -23,6 +23,8 @@
     left: 0;
     right: 0;
     background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
 
     transition-property: background-color;
     transition-duration: var(--transition-normal);
