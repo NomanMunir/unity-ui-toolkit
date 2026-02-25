@@ -8,44 +8,35 @@
  *  1. NavbarController (plain C# class — handles nav links)
  *  2. HomePageController (plain C# class — handles page content)
  *  3. PopupController (MonoBehaviour on a DIFFERENT GameObject)
+ *  4. ChatPanelController (MonoBehaviour on a DIFFERENT GameObject)
  *
  *  ARCHITECTURE OVERVIEW:
  *  ─────────────────────────────────────────
  *
- *  [HomePage GameObject]           [PopupOverlay GameObject]
- *  ├── UIDocument (sortingOrder=0) ├── UIDocument (sortingOrder=100)
- *  ├── MultiDocManager.cs          └── PopupController.cs
- *  │   ├── NavbarController ←─ event ──┐
- *  │   ├── HomePageController          │
- *  │   └── _popupController ──────→ [SerializeField ref]
- *  │                                   │
- *  │   OnShowPopupRequested ───────────┘
- *  │   OnConfirm / OnCancel ←──────── PopupController events
+ *  [HomePage GO]              [ChatPanel GO]         [PopupOverlay GO]
+ *  UIDocument (order=0)       UIDocument (order=1)   UIDocument (order=100)
+ *  MultiDocManager.cs         ChatPanelController    PopupController
+ *  ├── NavbarController
+ *  └── HomePageController
  *
- *  WHY A MEDIATOR?
- *  ─────────────────────────────────────────
- *  Sub-controllers (Navbar, HomePage) don't know about each other
- *  or about the popup. They only fire events. The master controller
- *  routes those events to the right destination.
- *
- *  This keeps each controller focused on ONE responsibility:
- *  - NavbarController: nav link state + "show popup" button
- *  - HomePageController: card data + card click events
- *  - PopupController: show/hide popup + confirm/cancel
- *  - MultiDocManager: WIRING between all of them
+ *  All cross-document events flow through this manager.
  *
  *  SETUP IN UNITY:
  *  ─────────────────────────────────────────
  *  1. Create "HomePage" GameObject
  *     - Add UIDocument → assign HomePage.uxml, PanelSettings
  *     - Add this script (MultiDocManager)
- *  2. Create "PopupOverlay" GameObject
+ *  2. Create "ChatPanel" GameObject
+ *     - Add UIDocument → assign ChatPanel.uxml, same PanelSettings
+ *     - Set sortingOrder = 1
+ *     - Add ChatPanelController script
+ *  3. Create "PopupOverlay" GameObject
  *     - Add UIDocument → assign PopupOverlay.uxml, same PanelSettings
  *     - Set sortingOrder = 100
  *     - Add PopupController script
- *     - DISABLE the GameObject (uncheck in Inspector)
- *  3. Drag "PopupOverlay" into MultiDocManager's "popupController" field
- *  4. Play!
+ *  4. Drag "ChatPanel" into MultiDocManager's chatPanelController field
+ *  5. Drag "PopupOverlay" into MultiDocManager's popupController field
+ *  6. Play!
  */
 
 using UnityEngine;
@@ -63,8 +54,11 @@ public class MultiDocManager : MonoBehaviour
     // ─────────────────────────────────────────
 
     [Header("Cross-Document References")]
-    [Tooltip("Drag the PopupOverlay GameObject here. It has its own UIDocument + PopupController.")]
+    [Tooltip("Drag the PopupOverlay GameObject here.")]
     [SerializeField] private PopupController popupController;
+
+    [Tooltip("Drag the ChatPanel GameObject here.")]
+    [SerializeField] private ChatPanelController chatPanelController;
 
 
     // ─────────────────────────────────────────
@@ -82,12 +76,15 @@ public class MultiDocManager : MonoBehaviour
 
     private void OnEnable()
     {
-        // Get THIS document's visual tree root
         var uiDoc = GetComponent<UIDocument>();
         _root = uiDoc.rootVisualElement;
 
         InitializeControllers();
         WireEvents();
+
+        // Log a welcome message to the chat panel
+        LogToChat("System", "Multi-Document UI initialized. Welcome!", ChatPanelController.MessageType.System);
+        LogToChat("System", "3 UIDocument layers active (Main, Chat, Popup).", ChatPanelController.MessageType.System);
 
         Debug.Log("[MultiDocManager] All controllers initialized and events wired.");
     }
@@ -97,25 +94,14 @@ public class MultiDocManager : MonoBehaviour
     //  INITIALIZATION
     // ─────────────────────────────────────────
 
-    /// <summary>
-    /// Creates sub-controllers and passes them their root elements.
-    ///
-    /// IMPORTANT: Q<T>() searches ALL descendants, including inside
-    /// template instances (TemplateContainers). So even though
-    /// "navbar" is defined in Navbar.uxml, we can find it here
-    /// because it's been composed into HomePage.uxml via ui:Instance.
-    /// </summary>
     private void InitializeControllers()
     {
         // ── Navbar Controller ──
-        // The Navbar component was placed via <ui:Instance template="Navbar" name="navbar-instance" />
-        // We can query the navbar root directly — Q<T>() crosses template boundaries.
         var navbarRoot = _root.Q<VisualElement>("navbar");
         _navbar = new NavbarController();
         _navbar.Initialize(navbarRoot);
 
         // ── HomePage Controller ──
-        // Pass the entire page body so it can find the card instances inside
         var pageBody = _root.Q<VisualElement>("page-body");
         _homePage = new HomePageController();
         _homePage.Initialize(pageBody);
@@ -126,18 +112,17 @@ public class MultiDocManager : MonoBehaviour
     //  EVENT WIRING — The Mediator Pattern
     // ─────────────────────────────────────────
 
-    /// <summary>
-    /// Wires events between controllers.
-    /// This is the ONLY place where controllers are connected.
-    ///
-    /// CROSS-DOCUMENT COMMUNICATION:
-    /// The Navbar fires OnShowPopupRequested.
-    /// This controller catches it and calls PopupController.Show().
-    /// PopupController lives on a DIFFERENT GameObject/UIDocument.
-    /// The reference was set via [SerializeField] in the Inspector.
-    /// </summary>
     private void WireEvents()
     {
+        // ── Navbar → Chat Panel (cross-document!) ──
+        _navbar.OnToggleChatRequested += () =>
+        {
+            if (chatPanelController != null)
+            {
+                chatPanelController.Toggle();
+            }
+        };
+
         // ── Navbar → Popup (cross-document!) ──
         _navbar.OnShowPopupRequested += () =>
         {
@@ -149,19 +134,19 @@ public class MultiDocManager : MonoBehaviour
                     "It renders above the main page and has its own controller.",
                     "🔔"
                 );
+                LogToChat("Event", "Popup opened from navbar.", ChatPanelController.MessageType.Event);
             }
             else
             {
-                Debug.LogWarning("[MultiDocManager] PopupController reference not set! " +
-                    "Drag the PopupOverlay GameObject into the Inspector field.");
+                Debug.LogWarning("[MultiDocManager] PopupController reference not set!");
             }
         };
 
-        // ── Navbar → Page content ──
+        // ── Navbar → Page content + Chat log ──
         _navbar.OnNavLinkClicked += (linkName) =>
         {
             Debug.Log($"[MultiDocManager] Navigation: {linkName}");
-            // In a real app, you'd swap page content here
+            LogToChat("Navigation", $"Switched to: {linkName}", ChatPanelController.MessageType.Event);
         };
 
         // ── HomePage → Popup (show member details) ──
@@ -176,6 +161,7 @@ public class MultiDocManager : MonoBehaviour
                     "👤"
                 );
             }
+            LogToChat("Event", $"Viewed details for {memberName}.", ChatPanelController.MessageType.Event);
         };
 
         // ── Popup → Main page (cross-document events!) ──
@@ -183,13 +169,43 @@ public class MultiDocManager : MonoBehaviour
         {
             popupController.OnConfirm += () =>
             {
-                Debug.Log("[MultiDocManager] Popup confirmed — handling in main controller.");
+                Debug.Log("[MultiDocManager] Popup confirmed.");
+                LogToChat("Action", "Popup confirmed ✔", ChatPanelController.MessageType.Success);
             };
 
             popupController.OnCancel += () =>
             {
-                Debug.Log("[MultiDocManager] Popup cancelled — handling in main controller.");
+                Debug.Log("[MultiDocManager] Popup cancelled.");
+                LogToChat("Action", "Popup dismissed ✖", ChatPanelController.MessageType.Error);
             };
+        }
+
+        // ── Chat panel → Main page ──
+        if (chatPanelController != null)
+        {
+            chatPanelController.OnMessageSent += (message) =>
+            {
+                Debug.Log($"[MultiDocManager] Chat message received: {message}");
+                // In a real app this could trigger game commands, etc.
+            };
+        }
+    }
+
+
+    // ─────────────────────────────────────────
+    //  HELPER — Log to Chat Panel
+    // ─────────────────────────────────────────
+
+    /// <summary>
+    /// Safely logs a message to the chat panel (if available).
+    /// This is the cross-document data flow in action:
+    ///   Action on Page → Manager catches event → Logs to Chat (different UIDocument)
+    /// </summary>
+    private void LogToChat(string sender, string text, ChatPanelController.MessageType type)
+    {
+        if (chatPanelController != null)
+        {
+            chatPanelController.AddMessage(sender, text, type);
         }
     }
 }

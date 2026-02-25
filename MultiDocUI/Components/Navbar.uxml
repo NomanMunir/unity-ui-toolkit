@@ -38,8 +38,9 @@
             <ui:Button text="ABOUT" name="nav-about" class="nav-link" />
         </ui:VisualElement>
 
-        <!-- Right — Action Button -->
+        <!-- Right — Action Buttons -->
         <ui:VisualElement class="navbar-actions">
+            <ui:Button text="💬 Chat Log" name="btn-toggle-chat" class="navbar-action-btn" />
             <ui:Button text="🔔 Show Popup" name="btn-show-popup" class="navbar-action-btn" />
         </ui:VisualElement>
 

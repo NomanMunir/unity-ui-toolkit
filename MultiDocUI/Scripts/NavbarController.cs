@@ -39,6 +39,12 @@ public class NavbarController
     public event Action OnShowPopupRequested;
 
     /// <summary>
+    /// Fired when the user clicks the "Chat Log" button.
+    /// The master controller listens and tells ChatPanelController to toggle.
+    /// </summary>
+    public event Action OnToggleChatRequested;
+
+    /// <summary>
     /// Fired when a nav link is clicked. Passes the link name (e.g., "HOME").
     /// </summary>
     public event Action<string> OnNavLinkClicked;
@@ -113,6 +119,17 @@ public class NavbarController
             {
                 Debug.Log("[NavbarController] Show Popup requested.");
                 OnShowPopupRequested?.Invoke();
+            };
+        }
+
+        // Chat toggle button
+        var chatBtn = _root.Q<Button>("btn-toggle-chat");
+        if (chatBtn != null)
+        {
+            chatBtn.clicked += () =>
+            {
+                Debug.Log("[NavbarController] Toggle Chat requested.");
+                OnToggleChatRequested?.Invoke();
             };
         }
     }

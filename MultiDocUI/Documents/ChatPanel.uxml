@@ -1,0 +1,68 @@
+<!--
+    ============================================
+    ChatPanel.uxml — Chat / Log Panel Layer
+    ============================================
+    A separate UIDocument layer (sortingOrder = 1)
+    positioned in the bottom-right corner.
+
+    This demonstrates a THIRD UIDocument layer:
+    - Main page:     sortingOrder = 0
+    - Chat panel:    sortingOrder = 1  ← THIS
+    - Popup overlay: sortingOrder = 100
+
+    The panel has:
+    - A header with close button
+    - A scrollable message list (populated from C#)
+    - An input bar for sending messages
+
+    SETUP:
+    1. Create "ChatPanel" GameObject
+    2. Add UIDocument → assign this file + same PanelSettings
+    3. Set sortingOrder = 1
+    4. Add ChatPanelController script
+    5. Drag into MultiDocManager's chatPanelController field
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         engine="UnityEngine.UIElements">
+
+    <!-- Styles -->
+    <Style src="../Styles/MultiDoc_Common.uss" />
+    <Style src="../Styles/MultiDoc_ChatPanel.uss" />
+
+    <!-- CHAT PANEL — Bottom-right corner overlay -->
+    <ui:VisualElement name="chat-panel" class="chat-panel">
+
+        <!-- ── Header ── -->
+        <ui:VisualElement class="chat-header">
+            <ui:VisualElement class="chat-header-left">
+                <ui:Label text="💬" class="chat-header-icon" />
+                <ui:Label text="EVENT LOG" class="chat-header-title" />
+                <ui:VisualElement class="chat-badge">
+                    <ui:Label text="0" name="chat-badge-count" class="chat-badge-text" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Button text="✕" name="btn-chat-close" class="chat-close-btn" />
+        </ui:VisualElement>
+
+        <!-- ── Message List (ScrollView) ── -->
+        <!--
+            Messages are added from C# using:
+              var msg = new VisualElement();
+              msg.AddToClassList("chat-message");
+              scrollView.Add(msg);
+
+            This demonstrates DYNAMIC element creation at runtime,
+            as opposed to the static Template/Instance pattern.
+        -->
+        <ui:ScrollView name="chat-messages" class="chat-messages" />
+
+        <!-- ── Input Bar ── -->
+        <ui:VisualElement class="chat-input-bar">
+            <ui:TextField name="chat-input" class="chat-input"
+                          value="" />
+            <ui:Button text="Send" name="btn-chat-send" class="chat-send-btn" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>
